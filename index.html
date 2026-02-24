@@ -62,6 +62,8 @@
       border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between;
       background:linear-gradient(0deg, rgba(234,246,244,.35), rgba(234,246,244,.35));
+      gap:10px;
+      flex-wrap:wrap;
     }
     .content{padding:14px 16px}
 
@@ -94,6 +96,7 @@
       cursor:pointer;
       transition:.15s transform, .15s opacity;
       user-select:none;
+      white-space:nowrap;
     }
     button:active{transform:translateY(1px)}
     .btn-primary{background:var(--accent); color:#083127}
@@ -106,7 +109,7 @@
       background:#F5FBFA; border:1px solid var(--line); color:var(--muted);
     }
 
-    /* ✅ FIX TABLA (sin distorsión) */
+    /* ✅ TABLA DESKTOP */
     .twrap{
       max-height:520px;
       overflow:auto;
@@ -156,13 +159,72 @@
       font-size:12px;
       color:var(--muted);
       margin-left:10px;
-      font-weight:700;
+      font-weight:800;
     }
     .status.ok{color:var(--accent2)}
     .status.bad{color:#8A1E1E}
+
+    /* ✅ PANEL OPERADOR (solo móvil) */
+    .operator{display:none}
+    .operator .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    .operator .big input{
+      font-size:16px;
+      padding:14px 14px;
+      border-radius:14px;
+    }
+    .operator .btnbar{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .operator .btnbar button{
+      padding:14px 14px;
+      border-radius:14px;
+      font-size:15px;
+    }
+    .operator .btnbar .span2{grid-column:1 / -1}
+
+    /* ✅ LISTA MÓVIL PARA REGISTROS */
+    .mobileList{display:none}
+    .mItem{
+      border-top:1px solid var(--line);
+      padding:12px 14px;
+      display:grid;
+      gap:8px;
+    }
+    .mTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+    }
+    .mMeta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+    .mMeta div{background:#F5FBFA;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+    .mActions{display:flex; justify-content:flex-end}
+
+    /* Breakpoint mobile */
+    @media (max-width: 560px){
+      main{padding:0 12px 22px}
+      .content{padding:12px}
+      /* oculto panel desktop */
+      .desktopPanel{display:none}
+      /* muestro panel operador */
+      .operator{display:block}
+      /* oculto tabla desktop y muestro lista */
+      .twrap{display:none}
+      .mobileList{display:block}
+    }
   </style>
 
-  <!-- XLSX para "Excel normal" (si quieres 100% offline, esto debe ir local) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 
@@ -175,6 +237,8 @@
   </header>
 
   <main>
+    <datalist id="locList"></datalist>
+
     <section class="card">
       <h2>
         Panel | Ingreso de movimientos
@@ -184,13 +248,13 @@
         </span>
       </h2>
 
-      <div class="content">
-        <datalist id="locList"></datalist>
-
+      <!-- ✅ PANEL DESKTOP (igual al tuyo) -->
+      <div class="content desktopPanel">
         <div class="row">
           <div>
             <label for="codigo">Código</label>
-            <input id="codigo" placeholder="Ej: 12760" autocomplete="off" />
+            <input id="codigo" placeholder="Ej: 12760" autocomplete="off"
+                   inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div>
@@ -205,7 +269,8 @@
 
           <div>
             <label for="qty">Qty</label>
-            <input id="qty" type="number" min="1" step="1" placeholder="50" />
+            <input id="qty" type="number" min="1" step="1" placeholder="50"
+                   inputmode="numeric" />
           </div>
         </div>
 
@@ -217,11 +282,47 @@
           <button class="btn-danger" id="btnClear">Limpiar todo</button>
         </div>
       </div>
+
+      <!-- ✅ PANEL OPERADOR (solo móvil) -->
+      <div class="content operator">
+        <div class="grid">
+          <div class="big">
+            <label for="mCodigo">Código</label>
+            <input id="mCodigo" placeholder="Código (numérico)" autocomplete="off"
+                   inputmode="numeric" pattern="[0-9]*" />
+          </div>
+
+          <div class="big">
+            <label for="mFrom">Posición (From)</label>
+            <input id="mFrom" list="locList" placeholder="Buscar ubicación…" autocomplete="off" />
+          </div>
+
+          <div class="big">
+            <label for="mTo">Posición (To)</label>
+            <input id="mTo" list="locList" placeholder="Buscar ubicación…" autocomplete="off" />
+          </div>
+
+          <div class="big">
+            <label for="mQty">Qty</label>
+            <input id="mQty" type="number" min="1" step="1" placeholder="Cantidad"
+                   inputmode="numeric" />
+          </div>
+
+          <div class="btnbar">
+            <button class="btn-primary span2" id="mAdd">+ Agregar</button>
+            <button class="btn-secondary" id="mPaste">Pegar</button>
+            <button class="btn-secondary" id="mCopy">Copiar</button>
+            <button class="btn-secondary" id="mXlsx">Excel</button>
+            <button class="btn-danger span2" id="mClear">Limpiar todo</button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="card" style="margin-top:16px">
       <h2>Tabla | Movimientos generados</h2>
 
+      <!-- ✅ DESKTOP TABLE -->
       <div class="twrap">
         <table>
           <colgroup>
@@ -232,7 +333,6 @@
             <col style="width:170px">
             <col style="width:120px">
           </colgroup>
-
           <thead>
             <tr>
               <th>Código</th>
@@ -246,19 +346,19 @@
           <tbody id="tbody"></tbody>
         </table>
       </div>
+
+      <!-- ✅ MOBILE LIST -->
+      <div class="mobileList" id="mobileList"></div>
     </section>
   </main>
 
-  <!-- ✅ FIREBASE + APP LOGIC (integrado con tu config) -->
   <script type="module">
-    // Firebase (CDN compatible con GitHub Pages)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import {
       getFirestore, collection, addDoc, deleteDoc, getDocs, writeBatch, doc,
       onSnapshot, query, orderBy, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    // === TU CONFIG (tal cual la pasaste) ===
     const firebaseConfig = {
       apiKey: "AIzaSyA1_yGJ2Z3jFZYzY5ZeQC1rlh1PFN5M_FU",
       authDomain: "perchado-d3e5b.firebaseapp.com",
@@ -270,11 +370,8 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
-    // Colección fija (toda tu data colaborativa vive aquí)
     const COL = "perchar_movimientos";
 
-    // UI helpers
     const $ = (id) => document.getElementById(id);
     const pad = (n) => String(n).padStart(2,"0");
 
@@ -287,20 +384,15 @@
         .replaceAll("'","&#039;");
     }
 
-    function fmtDateFromFirestore(ts){
-      // ts puede ser: Timestamp, null (serverTimestamp pendiente), o string legacy
+    function fmtDate(ts){
       try{
         if (!ts) return "";
-        // Timestamp de Firestore tiene .toDate()
         if (typeof ts.toDate === "function"){
           const d = ts.toDate();
           return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
         }
-        // si viene ya como string
         return String(ts);
-      }catch{
-        return "";
-      }
+      }catch{ return ""; }
     }
 
     function buildCatalog(){
@@ -326,208 +418,240 @@
       dl.appendChild(frag);
     }
 
-    // Estado en memoria (lo que llega de Firebase)
     let ROWS = [];
 
-    function setStatusOk(msg){
+    function setStatus(ok, msg){
       const el = $("syncStatus");
       el.textContent = msg;
-      el.classList.remove("bad");
-      el.classList.add("ok");
-    }
-    function setStatusBad(msg){
-      const el = $("syncStatus");
-      el.textContent = msg;
-      el.classList.remove("ok");
-      el.classList.add("bad");
+      el.classList.remove("ok","bad");
+      el.classList.add(ok ? "ok" : "bad");
     }
 
-    function render(rows){
-      $("countTag").textContent = `${rows.length} registros`;
-
+    function renderDesktop(rows){
       const tb = $("tbody");
       tb.innerHTML = "";
-
       for(const r of rows){
-        const fechaTxt = fmtDateFromFirestore(r.createdAt || r.fecha || "");
+        const fecha = fmtDate(r.createdAt || r.fecha || "");
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td title="${escapeHtml(r.codigo)}">${escapeHtml(r.codigo)}</td>
           <td title="${escapeHtml(r.from)}">${escapeHtml(r.from)}</td>
           <td title="${escapeHtml(r.to)}">${escapeHtml(r.to)}</td>
           <td class="right" title="${r.qty}">${r.qty}</td>
-          <td title="${escapeHtml(fechaTxt)}">${escapeHtml(fechaTxt)}</td>
+          <td title="${escapeHtml(fecha)}">${escapeHtml(fecha)}</td>
           <td><button class="btn-del" data-id="${r.id}">Eliminar</button></td>
         `;
         tb.appendChild(tr);
       }
-
       tb.querySelectorAll("button[data-id]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const id = btn.getAttribute("data-id");
-          try{
-            await deleteDoc(doc(db, COL, id));
-          }catch(e){
-            setStatusBad("Error al eliminar");
-            console.error(e);
-          }
+          await deleteDoc(doc(db, COL, id));
         });
       });
     }
 
-    async function addRowFromInputs(){
-      const codigo = $("codigo").value.trim();
-      const from = $("posFrom").value.trim();
-      const to = $("posTo").value.trim();
-      const qty = Number($("qty").value);
-
-      if(!codigo) return alert("Falta el Código.");
-      if(!from) return alert("Falta la Posición (From).");
-      if(!to) return alert("Falta la Posición (To).");
-      if(!Number.isFinite(qty) || qty <= 0) return alert("Qty debe ser mayor a 0.");
-
-      try{
-        await addDoc(collection(db, COL), {
-          codigo,
-          from,
-          to,
-          qty: Number(qty),
-          createdAt: serverTimestamp()
-        });
-
-        $("codigo").value = "";
-        $("posFrom").value = "";
-        $("posTo").value = "";
-        $("qty").value = "";
-        $("codigo").focus();
-      }catch(e){
-        setStatusBad("Error al guardar");
-        console.error(e);
+    function renderMobile(rows){
+      const box = $("mobileList");
+      box.innerHTML = "";
+      for(const r of rows){
+        const fecha = fmtDate(r.createdAt || r.fecha || "");
+        const item = document.createElement("div");
+        item.className = "mItem";
+        item.innerHTML = `
+          <div class="mTop">
+            <div>${escapeHtml(r.codigo)} <span style="color:var(--muted);font-weight:800">• Qty ${r.qty}</span></div>
+            <div style="color:var(--muted);font-size:12px;font-weight:800">${escapeHtml(fecha)}</div>
+          </div>
+          <div class="mMeta">
+            <div><b style="color:var(--ink)">From</b><br>${escapeHtml(r.from)}</div>
+            <div><b style="color:var(--ink)">To</b><br>${escapeHtml(r.to)}</div>
+          </div>
+          <div class="mActions">
+            <button class="btn-del" data-id="${r.id}">Eliminar</button>
+          </div>
+        `;
+        box.appendChild(item);
       }
+      box.querySelectorAll("button[data-id]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.getAttribute("data-id");
+          await deleteDoc(doc(db, COL, id));
+        });
+      });
     }
 
-    async function pasteLine(){
-      const raw = prompt("Pega la línea: codigo  from  to  qty");
+    function renderAll(rows){
+      $("countTag").textContent = `${rows.length} registros`;
+      renderDesktop(rows);
+      renderMobile(rows);
+    }
+
+    async function addMovement({codigo, from, to, qty}){
+      if(!codigo) return alert("Falta el Código.");
+      if(!from) return alert("Falta From.");
+      if(!to) return alert("Falta To.");
+      const q = Number(qty);
+      if(!Number.isFinite(q) || q<=0) return alert("Qty debe ser mayor a 0.");
+
+      await addDoc(collection(db, COL), {
+        codigo: String(codigo).trim(),
+        from: String(from).trim(),
+        to: String(to).trim(),
+        qty: q,
+        createdAt: serverTimestamp()
+      });
+    }
+
+    function readDesktopInputs(){
+      return {
+        codigo: $("codigo").value.trim(),
+        from: $("posFrom").value.trim(),
+        to: $("posTo").value.trim(),
+        qty: $("qty").value
+      };
+    }
+    function clearDesktopInputs(){
+      $("codigo").value=""; $("posFrom").value=""; $("posTo").value=""; $("qty").value="";
+      $("codigo").focus();
+    }
+
+    function readMobileInputs(){
+      return {
+        codigo: $("mCodigo").value.trim(),
+        from: $("mFrom").value.trim(),
+        to: $("mTo").value.trim(),
+        qty: $("mQty").value
+      };
+    }
+    function clearMobileInputs(){
+      $("mCodigo").value=""; $("mFrom").value=""; $("mTo").value=""; $("mQty").value="";
+      $("mCodigo").focus();
+    }
+
+    async function pasteLineInto(which){
+      const raw = prompt("Pega: codigo  from  to  qty");
       if(!raw) return;
       const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
-      if(parts.length < 4){
-        return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50");
+      if(parts.length < 4) return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50");
+      if(which === "mobile"){
+        $("mCodigo").value = parts[0];
+        $("mFrom").value = parts[1];
+        $("mTo").value = parts[2];
+        $("mQty").value = parts[3];
+        await addMovement(readMobileInputs());
+        clearMobileInputs();
+      }else{
+        $("codigo").value = parts[0];
+        $("posFrom").value = parts[1];
+        $("posTo").value = parts[2];
+        $("qty").value = parts[3];
+        await addMovement(readDesktopInputs());
+        clearDesktopInputs();
       }
-      $("codigo").value = parts[0];
-      $("posFrom").value = parts[1];
-      $("posTo").value = parts[2];
-      $("qty").value = parts[3];
-      await addRowFromInputs();
     }
 
     async function copyTable(){
       if(!ROWS.length) return alert("No hay registros para copiar.");
-
       const header = ["codigo","posicion(from)","posicion(to)","qty"].join("\t");
-      const lines = ROWS
-        .slice()
-        .reverse()
-        .map(r => [r.codigo, r.from, r.to, r.qty].join("\t"));
+      const lines = ROWS.slice().reverse().map(r => [r.codigo, r.from, r.to, r.qty].join("\t"));
       const text = [header, ...lines].join("\n");
-
-      try{
-        await navigator.clipboard.writeText(text);
-        alert("Copiado. Pega directo en Excel.");
-      }catch{
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        ta.remove();
+      try{ await navigator.clipboard.writeText(text); alert("Copiado. Pega directo en Excel."); }
+      catch{
+        const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); ta.remove();
         alert("Copiado. Pega directo en Excel.");
       }
     }
 
     function exportXlsx(){
       if(!ROWS.length) return alert("No hay registros para exportar.");
-
-      const data = ROWS
-        .slice()
-        .reverse()
-        .map(r => ({
-          codigo: r.codigo,
-          "posicion(from)": r.from,
-          "posicion(to)": r.to,
-          qty: r.qty,
-          fecha: fmtDateFromFirestore(r.createdAt || r.fecha || "")
-        }));
-
+      const data = ROWS.slice().reverse().map(r => ({
+        codigo: r.codigo,
+        "posicion(from)": r.from,
+        "posicion(to)": r.to,
+        qty: r.qty,
+        fecha: fmtDate(r.createdAt || r.fecha || "")
+      }));
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Movimientos");
-
-      const fname = `Perchar_Movimientos_${new Date().toISOString().slice(0,10)}.xlsx`;
-      XLSX.writeFile(wb, fname);
+      XLSX.writeFile(wb, `Perchar_Movimientos_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
 
-    // ✅ Borrar TODO (colección completa) con batch
     async function clearAll(){
       const ok = confirm("¿Borrar TODO lo guardado en la nube (Firebase)?");
       if(!ok) return;
 
-      try{
-        const snap = await getDocs(collection(db, COL));
-        if(snap.empty){
-          setStatusOk("No había registros");
-          return;
-        }
+      const snap = await getDocs(collection(db, COL));
+      if(snap.empty) return setStatus(true,"No había registros");
 
-        // Batch tiene límite de 500 operaciones
-        let batch = writeBatch(db);
-        let count = 0;
-
-        for(const d of snap.docs){
-          batch.delete(d.ref);
-          count++;
-          if(count % 450 === 0){
-            await batch.commit();
-            batch = writeBatch(db);
-          }
+      let batch = writeBatch(db);
+      let count = 0;
+      for(const d of snap.docs){
+        batch.delete(d.ref);
+        count++;
+        if(count % 450 === 0){
+          await batch.commit();
+          batch = writeBatch(db);
         }
-        await batch.commit();
-        setStatusOk("Todo limpio");
-      }catch(e){
-        setStatusBad("Error al limpiar");
-        console.error(e);
       }
+      await batch.commit();
+      setStatus(true,"Todo limpio");
     }
 
-    // Eventos UI
-    $("btnAdd").addEventListener("click", addRowFromInputs);
-    $("btnPaste").addEventListener("click", pasteLine);
+    // Eventos Desktop
+    $("btnAdd").addEventListener("click", async ()=>{
+      await addMovement(readDesktopInputs());
+      clearDesktopInputs();
+    });
+    $("btnPaste").addEventListener("click", ()=>pasteLineInto("desktop"));
     $("btnCopy").addEventListener("click", copyTable);
     $("btnXlsx").addEventListener("click", exportXlsx);
     $("btnClear").addEventListener("click", clearAll);
-
     ["codigo","posFrom","posTo","qty"].forEach(id=>{
-      $(id).addEventListener("keydown", (e)=>{
-        if(e.key === "Enter") addRowFromInputs();
+      $(id).addEventListener("keydown", async (e)=>{
+        if(e.key==="Enter"){
+          await addMovement(readDesktopInputs());
+          clearDesktopInputs();
+        }
       });
     });
 
-    // Catálogo
+    // Eventos Mobile (Operador)
+    $("mAdd").addEventListener("click", async ()=>{
+      await addMovement(readMobileInputs());
+      clearMobileInputs();
+    });
+    $("mPaste").addEventListener("click", ()=>pasteLineInto("mobile"));
+    $("mCopy").addEventListener("click", copyTable);
+    $("mXlsx").addEventListener("click", exportXlsx);
+    $("mClear").addEventListener("click", clearAll);
+    ["mCodigo","mFrom","mTo","mQty"].forEach(id=>{
+      $(id).addEventListener("keydown", async (e)=>{
+        if(e.key==="Enter"){
+          await addMovement(readMobileInputs());
+          clearMobileInputs();
+        }
+      });
+    });
+
     buildCatalog();
 
-    // ✅ Listener en vivo (todas las PCs)
+    // Listener realtime
     try{
-      const q = query(collection(db, COL), orderBy("createdAt", "desc"));
-      onSnapshot(q, (snap) => {
+      const q = query(collection(db, COL), orderBy("createdAt","desc"));
+      onSnapshot(q, (snap)=>{
         ROWS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        render(ROWS);
-        setStatusOk("Sincronizado");
-      }, (err) => {
-        setStatusBad("Sin permiso / error reglas");
+        renderAll(ROWS);
+        setStatus(true,"Sincronizado");
+      }, (err)=>{
         console.error(err);
+        setStatus(false,"Sin permiso / Rules");
       });
     }catch(e){
-      setStatusBad("Error Firebase");
       console.error(e);
+      setStatus(false,"Error Firebase");
     }
   </script>
 </body>
