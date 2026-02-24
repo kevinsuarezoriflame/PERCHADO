@@ -7,219 +7,70 @@
 
   <style>
     :root{
-      --bg:#EAF6F4;
-      --card:#FFFFFF;
-      --ink:#22303A;
-      --muted:#5C6B76;
-      --line:#D7E7E3;
-      --accent:#2FC49B;
-      --accent2:#1E8D71;
-      --danger:#E35B5B;
-      --shadow:0 10px 30px rgba(0,0,0,.08);
-      --r:16px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      --bg:#EAF6F4; --card:#FFFFFF; --ink:#22303A; --muted:#5C6B76; --line:#D7E7E3;
+      --accent:#2FC49B; --accent2:#1E8D71; --danger:#E35B5B; --shadow:0 10px 30px rgba(0,0,0,.08);
+      --r:16px; --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:var(--font);background:var(--bg);color:var(--ink)}
-
-    header{
-      position:sticky; top:0; z-index:20;
-      background:rgba(255,255,255,.75);
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid var(--line);
-    }
-    .topbar{
-      max-width:1100px; margin:0 auto;
-      padding:14px 16px;
-      display:flex; align-items:center; gap:12px;
-    }
-    .brand{display:flex; align-items:center; gap:10px; font-weight:800}
-    .dot{width:10px;height:10px;border-radius:50%;background:var(--accent); box-shadow:0 0 0 6px rgba(47,196,155,.18)}
-    .pill{
-      margin-left:auto;
-      display:flex; align-items:center; gap:8px;
-      background:#E7FBF5;
-      border:1px solid rgba(47,196,155,.35);
-      color:var(--accent2);
-      padding:8px 12px;
-      border-radius:999px;
-      font-weight:700;
-    }
-
+    header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.75);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+    .topbar{max-width:1100px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(47,196,155,.18)}
+    .pill{margin-left:auto;display:flex;align-items:center;gap:8px;background:#E7FBF5;border:1px solid rgba(47,196,155,.35);color:var(--accent2);padding:8px 12px;border-radius:999px;font-weight:700}
     main{max-width:1100px;margin:18px auto;padding:0 16px 28px}
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--r);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .card h2{
-      margin:0;
-      padding:14px 16px;
-      font-size:16px;
-      border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between;
-      background:linear-gradient(0deg, rgba(234,246,244,.35), rgba(234,246,244,.35));
-      gap:10px;
-      flex-wrap:wrap;
-    }
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+    .card h2{margin:0;padding:14px 16px;font-size:16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:linear-gradient(0deg, rgba(234,246,244,.35), rgba(234,246,244,.35))}
     .content{padding:14px 16px}
 
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr .6fr;
-      gap:10px;
-      align-items:end
-    }
+    .row{display:grid;grid-template-columns:1fr 1fr 1fr .6fr;gap:10px;align-items:end}
     @media (max-width: 900px){ .row{grid-template-columns:1fr 1fr} }
 
-    label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
-    input{
-      width:100%;
-      padding:11px 12px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      outline:none;
-      font-size:14px;
-      background:#fff;
-    }
-    input:focus{border-color:rgba(47,196,155,.65); box-shadow:0 0 0 4px rgba(47,196,155,.15)}
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+    input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;outline:none;font-size:14px;background:#fff}
+    input:focus{border-color:rgba(47,196,155,.65);box-shadow:0 0 0 4px rgba(47,196,155,.15)}
 
-    .btnbar{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
-    button{
-      border:0;
-      padding:11px 14px;
-      border-radius:12px;
-      font-weight:800;
-      cursor:pointer;
-      transition:.15s transform, .15s opacity;
-      user-select:none;
-      white-space:nowrap;
-    }
+    .btnbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{border:0;padding:11px 14px;border-radius:12px;font-weight:800;cursor:pointer;transition:.15s transform,.15s opacity;user-select:none;white-space:nowrap}
     button:active{transform:translateY(1px)}
-    .btn-primary{background:var(--accent); color:#083127}
-    .btn-secondary{background:#F2FBF8; color:var(--accent2); border:1px solid rgba(47,196,155,.35)}
-    .btn-danger{background:#FFECEC; color:#8A1E1E; border:1px solid rgba(227,91,91,.35)}
-    .tag{
-      display:inline-flex; align-items:center; gap:6px;
-      font-size:12px; font-weight:700;
-      padding:6px 10px; border-radius:999px;
-      background:#F5FBFA; border:1px solid var(--line); color:var(--muted);
-    }
-
-    /* ✅ TABLA DESKTOP */
-    .twrap{
-      max-height:520px;
-      overflow:auto;
-      border-top:1px solid var(--line);
-    }
-    table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      font-size:13px;
-      table-layout:fixed;
-    }
-    thead th{
-      text-align:left;
-      padding:10px 12px;
-      background:#E8F7F3;
-      color:#0D3B30;
-      border-bottom:1px solid var(--line);
-      position:sticky;
-      top:0;
-      z-index:2;
-      white-space:nowrap;
-    }
-    tbody td{
-      padding:10px 12px;
-      border-bottom:1px solid #EEF5F3;
-      color:var(--ink);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    tbody tr:hover td{background:#FBFEFD}
-    .right{text-align:right}
-
-    .btn-del{
-      padding:9px 12px;
-      border-radius:12px;
-      font-weight:900;
-      border:1px solid rgba(227,91,91,.35);
-      background:#FFECEC;
-      color:#8A1E1E;
-      cursor:pointer;
-      white-space:nowrap;
-    }
-
-    .status{
-      font-size:12px;
-      color:var(--muted);
-      margin-left:10px;
-      font-weight:800;
-    }
+    .btn-primary{background:var(--accent);color:#083127}
+    .btn-secondary{background:#F2FBF8;color:var(--accent2);border:1px solid rgba(47,196,155,.35)}
+    .btn-danger{background:#FFECEC;color:#8A1E1E;border:1px solid rgba(227,91,91,.35)}
+    .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;background:#F5FBFA;border:1px solid var(--line);color:var(--muted)}
+    .status{font-size:12px;color:var(--muted);margin-left:10px;font-weight:800}
     .status.ok{color:var(--accent2)}
     .status.bad{color:#8A1E1E}
 
-    /* ✅ PANEL OPERADOR (solo móvil) */
+    /* TABLA DESKTOP */
+    .twrap{max-height:520px;overflow:auto;border-top:1px solid var(--line)}
+    table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;table-layout:fixed}
+    thead th{text-align:left;padding:10px 12px;background:#E8F7F3;color:#0D3B30;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2;white-space:nowrap}
+    tbody td{padding:10px 12px;border-bottom:1px solid #EEF5F3;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    tbody tr:hover td{background:#FBFEFD}
+    .right{text-align:right}
+    .btn-del{padding:9px 12px;border-radius:12px;font-weight:900;border:1px solid rgba(227,91,91,.35);background:#FFECEC;color:#8A1E1E;cursor:pointer;white-space:nowrap}
+
+    /* PANEL OPERADOR (móvil) */
     .operator{display:none}
-    .operator .grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:10px;
-    }
-    .operator .big input{
-      font-size:16px;
-      padding:14px 14px;
-      border-radius:14px;
-    }
-    .operator .btnbar{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .operator .btnbar button{
-      padding:14px 14px;
-      border-radius:14px;
-      font-size:15px;
-    }
+    .operator .grid{display:grid;grid-template-columns:1fr;gap:10px}
+    .operator .big input{font-size:16px;padding:14px 14px;border-radius:14px}
+    .operator .btnbar{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .operator .btnbar button{padding:14px 14px;border-radius:14px;font-size:15px}
     .operator .btnbar .span2{grid-column:1 / -1}
 
-    /* ✅ LISTA MÓVIL PARA REGISTROS */
+    /* LISTA MÓVIL */
     .mobileList{display:none}
-    .mItem{
-      border-top:1px solid var(--line);
-      padding:12px 14px;
-      display:grid;
-      gap:8px;
-    }
-    .mTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      font-weight:900;
-    }
-    .mMeta{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:800;
-    }
+    .mItem{border-top:1px solid var(--line);padding:12px 14px;display:grid;gap:8px}
+    .mTop{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:900}
+    .mMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:var(--muted);font-size:12px;font-weight:800}
     .mMeta div{background:#F5FBFA;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
-    .mActions{display:flex; justify-content:flex-end}
+    .mActions{display:flex;justify-content:flex-end}
 
-    /* Breakpoint mobile */
-    @media (max-width: 560px){
+    @media (max-width:560px){
       main{padding:0 12px 22px}
       .content{padding:12px}
-      /* oculto panel desktop */
       .desktopPanel{display:none}
-      /* muestro panel operador */
       .operator{display:block}
-      /* oculto tabla desktop y muestro lista */
       .twrap{display:none}
       .mobileList{display:block}
     }
@@ -248,29 +99,34 @@
         </span>
       </h2>
 
-      <!-- ✅ PANEL DESKTOP (igual al tuyo) -->
+      <!-- DESKTOP -->
       <div class="content desktopPanel">
         <div class="row">
           <div>
             <label for="codigo">Código</label>
-            <input id="codigo" placeholder="Ej: 12760" autocomplete="off"
-                   inputmode="numeric" pattern="[0-9]*" />
+            <!-- ✅ teclado numérico por defecto, pero permite letras -->
+            <input id="codigo" placeholder="Ej: 12760 o TODO"
+              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div>
             <label for="posFrom">Posición (From)</label>
-            <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02" autocomplete="off" />
+            <!-- ✅ numérico por defecto, pero permite letras (Bulk_CW1, etc.) -->
+            <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02"
+              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div>
             <label for="posTo">Posición (To)</label>
-            <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03" autocomplete="off" />
+            <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03"
+              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div>
             <label for="qty">Qty</label>
-            <input id="qty" type="number" min="1" step="1" placeholder="50"
-                   inputmode="numeric" />
+            <!-- ✅ ahora puede ser número o texto (TODO) -->
+            <input id="qty" placeholder="Ej: 50 o TODO"
+              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
         </div>
 
@@ -283,29 +139,31 @@
         </div>
       </div>
 
-      <!-- ✅ PANEL OPERADOR (solo móvil) -->
+      <!-- MÓVIL OPERADOR -->
       <div class="content operator">
         <div class="grid">
           <div class="big">
             <label for="mCodigo">Código</label>
-            <input id="mCodigo" placeholder="Código (numérico)" autocomplete="off"
-                   inputmode="numeric" pattern="[0-9]*" />
+            <input id="mCodigo" placeholder="Código (12760 o TODO)"
+              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div class="big">
             <label for="mFrom">Posición (From)</label>
-            <input id="mFrom" list="locList" placeholder="Buscar ubicación…" autocomplete="off" />
+            <input id="mFrom" list="locList" placeholder="Buscar ubicación…"
+              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div class="big">
             <label for="mTo">Posición (To)</label>
-            <input id="mTo" list="locList" placeholder="Buscar ubicación…" autocomplete="off" />
+            <input id="mTo" list="locList" placeholder="Buscar ubicación…"
+              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div class="big">
             <label for="mQty">Qty</label>
-            <input id="mQty" type="number" min="1" step="1" placeholder="Cantidad"
-                   inputmode="numeric" />
+            <input id="mQty" placeholder="Cantidad o TODO"
+              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div class="btnbar">
@@ -322,7 +180,6 @@
     <section class="card" style="margin-top:16px">
       <h2>Tabla | Movimientos generados</h2>
 
-      <!-- ✅ DESKTOP TABLE -->
       <div class="twrap">
         <table>
           <colgroup>
@@ -347,7 +204,6 @@
         </table>
       </div>
 
-      <!-- ✅ MOBILE LIST -->
       <div class="mobileList" id="mobileList"></div>
     </section>
   </main>
@@ -374,15 +230,7 @@
 
     const $ = (id) => document.getElementById(id);
     const pad = (n) => String(n).padStart(2,"0");
-
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
+    const esc = (s) => String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 
     function fmtDate(ts){
       try{
@@ -434,11 +282,11 @@
         const fecha = fmtDate(r.createdAt || r.fecha || "");
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td title="${escapeHtml(r.codigo)}">${escapeHtml(r.codigo)}</td>
-          <td title="${escapeHtml(r.from)}">${escapeHtml(r.from)}</td>
-          <td title="${escapeHtml(r.to)}">${escapeHtml(r.to)}</td>
-          <td class="right" title="${r.qty}">${r.qty}</td>
-          <td title="${escapeHtml(fecha)}">${escapeHtml(fecha)}</td>
+          <td title="${esc(r.codigo)}">${esc(r.codigo)}</td>
+          <td title="${esc(r.from)}">${esc(r.from)}</td>
+          <td title="${esc(r.to)}">${esc(r.to)}</td>
+          <td class="right" title="${esc(r.qty)}">${esc(r.qty)}</td>
+          <td title="${esc(fecha)}">${esc(fecha)}</td>
           <td><button class="btn-del" data-id="${r.id}">Eliminar</button></td>
         `;
         tb.appendChild(tr);
@@ -460,12 +308,12 @@
         item.className = "mItem";
         item.innerHTML = `
           <div class="mTop">
-            <div>${escapeHtml(r.codigo)} <span style="color:var(--muted);font-weight:800">• Qty ${r.qty}</span></div>
-            <div style="color:var(--muted);font-size:12px;font-weight:800">${escapeHtml(fecha)}</div>
+            <div>${esc(r.codigo)} <span style="color:var(--muted);font-weight:800">• Qty ${esc(r.qty)}</span></div>
+            <div style="color:var(--muted);font-size:12px;font-weight:800">${esc(fecha)}</div>
           </div>
           <div class="mMeta">
-            <div><b style="color:var(--ink)">From</b><br>${escapeHtml(r.from)}</div>
-            <div><b style="color:var(--ink)">To</b><br>${escapeHtml(r.to)}</div>
+            <div><b style="color:var(--ink)">From</b><br>${esc(r.from)}</div>
+            <div><b style="color:var(--ink)">To</b><br>${esc(r.to)}</div>
           </div>
           <div class="mActions">
             <button class="btn-del" data-id="${r.id}">Eliminar</button>
@@ -487,29 +335,44 @@
       renderMobile(rows);
     }
 
+    // ✅ Qty: acepta número (>0) o texto (ej. TODO). No puede ir vacío.
+    function validateQty(qtyRaw){
+      const s = String(qtyRaw ?? "").trim();
+      if(!s) return { ok:false, msg:"Qty vacío." };
+
+      // Si es totalmente numérico (ej "50" o "050")
+      if (/^\d+(\.\d+)?$/.test(s)){
+        const n = Number(s);
+        if (!Number.isFinite(n) || n <= 0) return { ok:false, msg:"Qty numérico debe ser > 0." };
+        return { ok:true, value:n }; // guardamos como número
+      }
+
+      // Si es texto (TODO, Todo, etc.) lo guardamos como string
+      return { ok:true, value:s };
+    }
+
     async function addMovement({codigo, from, to, qty}){
-      if(!codigo) return alert("Falta el Código.");
-      if(!from) return alert("Falta From.");
-      if(!to) return alert("Falta To.");
-      const q = Number(qty);
-      if(!Number.isFinite(q) || q<=0) return alert("Qty debe ser mayor a 0.");
+      const c = String(codigo ?? "").trim();
+      const f = String(from ?? "").trim();
+      const t = String(to ?? "").trim();
+      if(!c) return alert("Falta el Código.");
+      if(!f) return alert("Falta From.");
+      if(!t) return alert("Falta To.");
+
+      const vq = validateQty(qty);
+      if(!vq.ok) return alert(vq.msg);
 
       await addDoc(collection(db, COL), {
-        codigo: String(codigo).trim(),
-        from: String(from).trim(),
-        to: String(to).trim(),
-        qty: q,
+        codigo: c,
+        from: f,
+        to: t,
+        qty: vq.value,          // número o texto
         createdAt: serverTimestamp()
       });
     }
 
     function readDesktopInputs(){
-      return {
-        codigo: $("codigo").value.trim(),
-        from: $("posFrom").value.trim(),
-        to: $("posTo").value.trim(),
-        qty: $("qty").value
-      };
+      return { codigo: $("codigo").value, from: $("posFrom").value, to: $("posTo").value, qty: $("qty").value };
     }
     function clearDesktopInputs(){
       $("codigo").value=""; $("posFrom").value=""; $("posTo").value=""; $("qty").value="";
@@ -517,12 +380,7 @@
     }
 
     function readMobileInputs(){
-      return {
-        codigo: $("mCodigo").value.trim(),
-        from: $("mFrom").value.trim(),
-        to: $("mTo").value.trim(),
-        qty: $("mQty").value
-      };
+      return { codigo: $("mCodigo").value, from: $("mFrom").value, to: $("mTo").value, qty: $("mQty").value };
     }
     function clearMobileInputs(){
       $("mCodigo").value=""; $("mFrom").value=""; $("mTo").value=""; $("mQty").value="";
@@ -530,22 +388,23 @@
     }
 
     async function pasteLineInto(which){
-      const raw = prompt("Pega: codigo  from  to  qty");
+      const raw = prompt("Pega: codigo  from  to  qty (qty puede ser TODO)");
       if(!raw) return;
       const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
-      if(parts.length < 4) return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50");
+      if(parts.length < 4) return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50  (o TODO)");
+
       if(which === "mobile"){
         $("mCodigo").value = parts[0];
-        $("mFrom").value = parts[1];
-        $("mTo").value = parts[2];
-        $("mQty").value = parts[3];
+        $("mFrom").value   = parts[1];
+        $("mTo").value     = parts[2];
+        $("mQty").value    = parts.slice(3).join(" "); // por si qty tiene texto con espacios
         await addMovement(readMobileInputs());
         clearMobileInputs();
       }else{
-        $("codigo").value = parts[0];
+        $("codigo").value  = parts[0];
         $("posFrom").value = parts[1];
-        $("posTo").value = parts[2];
-        $("qty").value = parts[3];
+        $("posTo").value   = parts[2];
+        $("qty").value     = parts.slice(3).join(" ");
         await addMovement(readDesktopInputs());
         clearDesktopInputs();
       }
@@ -582,7 +441,6 @@
     async function clearAll(){
       const ok = confirm("¿Borrar TODO lo guardado en la nube (Firebase)?");
       if(!ok) return;
-
       const snap = await getDocs(collection(db, COL));
       if(snap.empty) return setStatus(true,"No había registros");
 
@@ -601,44 +459,31 @@
     }
 
     // Eventos Desktop
-    $("btnAdd").addEventListener("click", async ()=>{
-      await addMovement(readDesktopInputs());
-      clearDesktopInputs();
-    });
+    $("btnAdd").addEventListener("click", async ()=>{ await addMovement(readDesktopInputs()); clearDesktopInputs(); });
     $("btnPaste").addEventListener("click", ()=>pasteLineInto("desktop"));
     $("btnCopy").addEventListener("click", copyTable);
     $("btnXlsx").addEventListener("click", exportXlsx);
     $("btnClear").addEventListener("click", clearAll);
     ["codigo","posFrom","posTo","qty"].forEach(id=>{
       $(id).addEventListener("keydown", async (e)=>{
-        if(e.key==="Enter"){
-          await addMovement(readDesktopInputs());
-          clearDesktopInputs();
-        }
+        if(e.key==="Enter"){ await addMovement(readDesktopInputs()); clearDesktopInputs(); }
       });
     });
 
-    // Eventos Mobile (Operador)
-    $("mAdd").addEventListener("click", async ()=>{
-      await addMovement(readMobileInputs());
-      clearMobileInputs();
-    });
+    // Eventos Mobile
+    $("mAdd").addEventListener("click", async ()=>{ await addMovement(readMobileInputs()); clearMobileInputs(); });
     $("mPaste").addEventListener("click", ()=>pasteLineInto("mobile"));
     $("mCopy").addEventListener("click", copyTable);
     $("mXlsx").addEventListener("click", exportXlsx);
     $("mClear").addEventListener("click", clearAll);
     ["mCodigo","mFrom","mTo","mQty"].forEach(id=>{
       $(id).addEventListener("keydown", async (e)=>{
-        if(e.key==="Enter"){
-          await addMovement(readMobileInputs());
-          clearMobileInputs();
-        }
+        if(e.key==="Enter"){ await addMovement(readMobileInputs()); clearMobileInputs(); }
       });
     });
 
     buildCatalog();
 
-    // Listener realtime
     try{
       const q = query(collection(db, COL), orderBy("createdAt","desc"));
       onSnapshot(q, (snap)=>{
