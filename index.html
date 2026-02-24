@@ -58,6 +58,25 @@
     .operator .btnbar button{padding:14px 14px;border-radius:14px;font-size:15px}
     .operator .btnbar .span2{grid-column:1 / -1}
 
+    /* Toggle teclado (NUM / ABC) */
+    .keyRow{display:flex; gap:10px; align-items:center}
+    .keyRow .keyWrap{flex:1}
+    .keyBtn{
+      padding:12px 12px;
+      border-radius:12px;
+      font-weight:900;
+      background:#F2FBF8;
+      color:var(--accent2);
+      border:1px solid rgba(47,196,155,.35);
+      cursor:pointer;
+      min-width:88px;
+    }
+    .keyBtn.active{
+      background:var(--accent);
+      color:#083127;
+      border-color:transparent;
+    }
+
     /* LISTA MÓVIL */
     .mobileList{display:none}
     .mItem{border-top:1px solid var(--line);padding:12px 14px;display:grid;gap:8px}
@@ -104,14 +123,12 @@
         <div class="row">
           <div>
             <label for="codigo">Código</label>
-            <!-- ✅ teclado numérico por defecto, pero permite letras -->
             <input id="codigo" placeholder="Ej: 12760 o TODO"
               autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
 
           <div>
             <label for="posFrom">Posición (From)</label>
-            <!-- ✅ numérico por defecto, pero permite letras (Bulk_CW1, etc.) -->
             <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02"
               autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
@@ -124,7 +141,6 @@
 
           <div>
             <label for="qty">Qty</label>
-            <!-- ✅ ahora puede ser número o texto (TODO) -->
             <input id="qty" placeholder="Ej: 50 o TODO"
               autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
           </div>
@@ -144,26 +160,46 @@
         <div class="grid">
           <div class="big">
             <label for="mCodigo">Código</label>
-            <input id="mCodigo" placeholder="Código (12760 o TODO)"
-              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+            <div class="keyRow">
+              <div class="keyWrap">
+                <input id="mCodigo" placeholder="Código (12760 o TODO)"
+                  autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              </div>
+              <button class="keyBtn" type="button" data-target="mCodigo">ABC</button>
+            </div>
           </div>
 
           <div class="big">
             <label for="mFrom">Posición (From)</label>
-            <input id="mFrom" list="locList" placeholder="Buscar ubicación…"
-              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+            <div class="keyRow">
+              <div class="keyWrap">
+                <input id="mFrom" list="locList" placeholder="Buscar ubicación…"
+                  autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              </div>
+              <button class="keyBtn" type="button" data-target="mFrom">ABC</button>
+            </div>
           </div>
 
           <div class="big">
             <label for="mTo">Posición (To)</label>
-            <input id="mTo" list="locList" placeholder="Buscar ubicación…"
-              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+            <div class="keyRow">
+              <div class="keyWrap">
+                <input id="mTo" list="locList" placeholder="Buscar ubicación…"
+                  autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              </div>
+              <button class="keyBtn" type="button" data-target="mTo">ABC</button>
+            </div>
           </div>
 
           <div class="big">
             <label for="mQty">Qty</label>
-            <input id="mQty" placeholder="Cantidad o TODO"
-              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+            <div class="keyRow">
+              <div class="keyWrap">
+                <input id="mQty" placeholder="Cantidad o TODO"
+                  autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              </div>
+              <button class="keyBtn" type="button" data-target="mQty">ABC</button>
+            </div>
           </div>
 
           <div class="btnbar">
@@ -230,7 +266,9 @@
 
     const $ = (id) => document.getElementById(id);
     const pad = (n) => String(n).padStart(2,"0");
-    const esc = (s) => String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    const esc = (s) => String(s ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
 
     function fmtDate(ts){
       try{
@@ -335,19 +373,16 @@
       renderMobile(rows);
     }
 
-    // ✅ Qty: acepta número (>0) o texto (ej. TODO). No puede ir vacío.
+    // Qty: acepta número (>0) o texto (TODO). No puede ir vacío.
     function validateQty(qtyRaw){
       const s = String(qtyRaw ?? "").trim();
       if(!s) return { ok:false, msg:"Qty vacío." };
 
-      // Si es totalmente numérico (ej "50" o "050")
       if (/^\d+(\.\d+)?$/.test(s)){
         const n = Number(s);
         if (!Number.isFinite(n) || n <= 0) return { ok:false, msg:"Qty numérico debe ser > 0." };
-        return { ok:true, value:n }; // guardamos como número
+        return { ok:true, value:n };
       }
-
-      // Si es texto (TODO, Todo, etc.) lo guardamos como string
       return { ok:true, value:s };
     }
 
@@ -366,7 +401,7 @@
         codigo: c,
         from: f,
         to: t,
-        qty: vq.value,          // número o texto
+        qty: vq.value,
         createdAt: serverTimestamp()
       });
     }
@@ -391,20 +426,22 @@
       const raw = prompt("Pega: codigo  from  to  qty (qty puede ser TODO)");
       if(!raw) return;
       const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
-      if(parts.length < 4) return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50  (o TODO)");
+      if(parts.length < 4) return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50 (o TODO)");
+
+      const qtyVal = parts.slice(3).join(" ");
 
       if(which === "mobile"){
         $("mCodigo").value = parts[0];
         $("mFrom").value   = parts[1];
         $("mTo").value     = parts[2];
-        $("mQty").value    = parts.slice(3).join(" "); // por si qty tiene texto con espacios
+        $("mQty").value    = qtyVal;
         await addMovement(readMobileInputs());
         clearMobileInputs();
       }else{
         $("codigo").value  = parts[0];
         $("posFrom").value = parts[1];
         $("posTo").value   = parts[2];
-        $("qty").value     = parts.slice(3).join(" ");
+        $("qty").value     = qtyVal;
         await addMovement(readDesktopInputs());
         clearDesktopInputs();
       }
@@ -482,8 +519,37 @@
       });
     });
 
-    buildCatalog();
+    // ✅ Toggle ABC/NUM en móvil
+    function enableKeyboardToggles(){
+      const btns = document.querySelectorAll(".keyBtn[data-target]");
+      btns.forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = btn.getAttribute("data-target");
+          const el = document.getElementById(id);
+          if(!el) return;
 
+          const isABC = btn.classList.contains("active");
+
+          if(isABC){
+            btn.classList.remove("active");
+            el.setAttribute("inputmode","numeric");
+            el.setAttribute("pattern","[0-9]*");
+          }else{
+            btn.classList.add("active");
+            el.setAttribute("inputmode","text");
+            el.removeAttribute("pattern");
+          }
+
+          el.blur();
+          setTimeout(()=>el.focus(), 50);
+        });
+      });
+    }
+
+    buildCatalog();
+    enableKeyboardToggles();
+
+    // Listener realtime
     try{
       const q = query(collection(db, COL), orderBy("createdAt","desc"));
       onSnapshot(q, (snap)=>{
