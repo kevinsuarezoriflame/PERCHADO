@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Perchar | Ingreso de Ubicaciones</title>
+
+  <style>
+    :root{
+      --bg:#EAF6F4;
+      --card:#FFFFFF;
+      --ink:#22303A;
+      --muted:#5C6B76;
+      --line:#D7E7E3;
+      --accent:#2FC49B;
+      --accent2:#1E8D71;
+      --danger:#E35B5B;
+      --shadow:0 10px 30px rgba(0,0,0,.08);
+      --r:16px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--font);background:var(--bg);color:var(--ink)}
+
+    header{
+      position:sticky; top:0; z-index:20;
+      background:rgba(255,255,255,.75);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px; margin:0 auto;
+      padding:14px 16px;
+      display:flex; align-items:center; gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--accent); box-shadow:0 0 0 6px rgba(47,196,155,.18)}
+    .pill{
+      margin-left:auto;
+      display:flex; align-items:center; gap:8px;
+      background:#E7FBF5;
+      border:1px solid rgba(47,196,155,.35);
+      color:var(--accent2);
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:700;
+    }
+
+    main{max-width:1100px;margin:18px auto;padding:0 16px 28px}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0;
+      padding:14px 16px;
+      font-size:16px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between;
+      background:linear-gradient(0deg, rgba(234,246,244,.35), rgba(234,246,244,.35));
+    }
+    .content{padding:14px 16px}
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr .6fr;
+      gap:10px;
+      align-items:end
+    }
+    @media (max-width: 900px){ .row{grid-template-columns:1fr 1fr} }
+
+    label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
+    input{
+      width:100%;
+      padding:11px 12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      outline:none;
+      font-size:14px;
+      background:#fff;
+    }
+    input:focus{border-color:rgba(47,196,155,.65); box-shadow:0 0 0 4px rgba(47,196,155,.15)}
+
+    .btnbar{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    button{
+      border:0;
+      padding:11px 14px;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.15s transform, .15s opacity;
+      user-select:none;
+    }
+    button:active{transform:translateY(1px)}
+    .btn-primary{background:var(--accent); color:#083127}
+    .btn-secondary{background:#F2FBF8; color:var(--accent2); border:1px solid rgba(47,196,155,.35)}
+    .btn-danger{background:#FFECEC; color:#8A1E1E; border:1px solid rgba(227,91,91,.35)}
+    .tag{
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:12px; font-weight:700;
+      padding:6px 10px; border-radius:999px;
+      background:#F5FBFA; border:1px solid var(--line); color:var(--muted);
+    }
+
+    /* ✅ FIX TABLA (sin distorsión) */
+    .twrap{
+      max-height:520px;
+      overflow:auto;
+      border-top:1px solid var(--line);
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:13px;
+      table-layout:fixed;
+    }
+    thead th{
+      text-align:left;
+      padding:10px 12px;
+      background:#E8F7F3;
+      color:#0D3B30;
+      border-bottom:1px solid var(--line);
+      position:sticky;
+      top:0;
+      z-index:2;
+      white-space:nowrap;
+    }
+    tbody td{
+      padding:10px 12px;
+      border-bottom:1px solid #EEF5F3;
+      color:var(--ink);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    tbody tr:hover td{background:#FBFEFD}
+    .right{text-align:right}
+
+    .btn-del{
+      padding:9px 12px;
+      border-radius:12px;
+      font-weight:900;
+      border:1px solid rgba(227,91,91,.35);
+      background:#FFECEC;
+      color:#8A1E1E;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .status{
+      font-size:12px;
+      color:var(--muted);
+      margin-left:10px;
+      font-weight:700;
+    }
+    .status.ok{color:var(--accent2)}
+    .status.bad{color:#8A1E1E}
+  </style>
+
+  <!-- XLSX para "Excel normal" (si quieres 100% offline, esto debe ir local) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span> Perchar</div>
+      <div class="pill">Data</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>
+        Panel | Ingreso de movimientos
+        <span>
+          <span class="tag" id="countTag">0 registros</span>
+          <span class="status" id="syncStatus">Sincronizando…</span>
+        </span>
+      </h2>
+
+      <div class="content">
+        <datalist id="locList"></datalist>
+
+        <div class="row">
+          <div>
+            <label for="codigo">Código</label>
+            <input id="codigo" placeholder="Ej: 12760" autocomplete="off" />
+          </div>
+
+          <div>
+            <label for="posFrom">Posición (From)</label>
+            <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02" autocomplete="off" />
+          </div>
+
+          <div>
+            <label for="posTo">Posición (To)</label>
+            <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03" autocomplete="off" />
+          </div>
+
+          <div>
+            <label for="qty">Qty</label>
+            <input id="qty" type="number" min="1" step="1" placeholder="50" />
+          </div>
+        </div>
+
+        <div class="btnbar">
+          <button class="btn-primary" id="btnAdd">+ Agregar</button>
+          <button class="btn-secondary" id="btnPaste">Pegar línea</button>
+          <button class="btn-secondary" id="btnCopy">Copiar tabla</button>
+          <button class="btn-secondary" id="btnXlsx">Descargar Excel</button>
+          <button class="btn-danger" id="btnClear">Limpiar todo</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:16px">
+      <h2>Tabla | Movimientos generados</h2>
+
+      <div class="twrap">
+        <table>
+          <colgroup>
+            <col style="width:140px">
+            <col style="width:38%">
+            <col style="width:38%">
+            <col style="width:90px">
+            <col style="width:170px">
+            <col style="width:120px">
+          </colgroup>
+
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>From</th>
+              <th>To</th>
+              <th class="right">Qty</th>
+              <th>Fecha</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- ✅ FIREBASE + APP LOGIC (integrado con tu config) -->
+  <script type="module">
+    // Firebase (CDN compatible con GitHub Pages)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, deleteDoc, getDocs, writeBatch, doc,
+      onSnapshot, query, orderBy, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    // === TU CONFIG (tal cual la pasaste) ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyA1_yGJ2Z3jFZYzY5ZeQC1rlh1PFN5M_FU",
+      authDomain: "perchado-d3e5b.firebaseapp.com",
+      projectId: "perchado-d3e5b",
+      storageBucket: "perchado-d3e5b.firebasestorage.app",
+      messagingSenderId: "117418842657",
+      appId: "1:117418842657:web:8da093b7d020884deb6160"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Colección fija (toda tu data colaborativa vive aquí)
+    const COL = "perchar_movimientos";
+
+    // UI helpers
+    const $ = (id) => document.getElementById(id);
+    const pad = (n) => String(n).padStart(2,"0");
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function fmtDateFromFirestore(ts){
+      // ts puede ser: Timestamp, null (serverTimestamp pendiente), o string legacy
+      try{
+        if (!ts) return "";
+        // Timestamp de Firestore tiene .toDate()
+        if (typeof ts.toDate === "function"){
+          const d = ts.toDate();
+          return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+        // si viene ya como string
+        return String(ts);
+      }catch{
+        return "";
+      }
+    }
+
+    function buildCatalog(){
+      const dl = $("locList");
+      dl.innerHTML = "";
+      const frag = document.createDocumentFragment();
+
+      for(let i=1;i<=90;i++){
+        const mid = pad(i);
+        for(let j=1;j<=7;j++){
+          const opt = document.createElement("option");
+          opt.value = `01-30-${mid}-${pad(j)}`;
+          frag.appendChild(opt);
+        }
+      }
+      ["Bulk_CW1","Bulk_CW2","Bulk_CW3","Bulk_CW4","Bulk_CW5","Bulk_CW6","Inb_PL-CW","Papeleria","Compra Local"]
+        .forEach(v=>{
+          const opt = document.createElement("option");
+          opt.value = v;
+          frag.appendChild(opt);
+        });
+
+      dl.appendChild(frag);
+    }
+
+    // Estado en memoria (lo que llega de Firebase)
+    let ROWS = [];
+
+    function setStatusOk(msg){
+      const el = $("syncStatus");
+      el.textContent = msg;
+      el.classList.remove("bad");
+      el.classList.add("ok");
+    }
+    function setStatusBad(msg){
+      const el = $("syncStatus");
+      el.textContent = msg;
+      el.classList.remove("ok");
+      el.classList.add("bad");
+    }
+
+    function render(rows){
+      $("countTag").textContent = `${rows.length} registros`;
+
+      const tb = $("tbody");
+      tb.innerHTML = "";
+
+      for(const r of rows){
+        const fechaTxt = fmtDateFromFirestore(r.createdAt || r.fecha || "");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td title="${escapeHtml(r.codigo)}">${escapeHtml(r.codigo)}</td>
+          <td title="${escapeHtml(r.from)}">${escapeHtml(r.from)}</td>
+          <td title="${escapeHtml(r.to)}">${escapeHtml(r.to)}</td>
+          <td class="right" title="${r.qty}">${r.qty}</td>
+          <td title="${escapeHtml(fechaTxt)}">${escapeHtml(fechaTxt)}</td>
+          <td><button class="btn-del" data-id="${r.id}">Eliminar</button></td>
+        `;
+        tb.appendChild(tr);
+      }
+
+      tb.querySelectorAll("button[data-id]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.getAttribute("data-id");
+          try{
+            await deleteDoc(doc(db, COL, id));
+          }catch(e){
+            setStatusBad("Error al eliminar");
+            console.error(e);
+          }
+        });
+      });
+    }
+
+    async function addRowFromInputs(){
+      const codigo = $("codigo").value.trim();
+      const from = $("posFrom").value.trim();
+      const to = $("posTo").value.trim();
+      const qty = Number($("qty").value);
+
+      if(!codigo) return alert("Falta el Código.");
+      if(!from) return alert("Falta la Posición (From).");
+      if(!to) return alert("Falta la Posición (To).");
+      if(!Number.isFinite(qty) || qty <= 0) return alert("Qty debe ser mayor a 0.");
+
+      try{
+        await addDoc(collection(db, COL), {
+          codigo,
+          from,
+          to,
+          qty: Number(qty),
+          createdAt: serverTimestamp()
+        });
+
+        $("codigo").value = "";
+        $("posFrom").value = "";
+        $("posTo").value = "";
+        $("qty").value = "";
+        $("codigo").focus();
+      }catch(e){
+        setStatusBad("Error al guardar");
+        console.error(e);
+      }
+    }
+
+    async function pasteLine(){
+      const raw = prompt("Pega la línea: codigo  from  to  qty");
+      if(!raw) return;
+      const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
+      if(parts.length < 4){
+        return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50");
+      }
+      $("codigo").value = parts[0];
+      $("posFrom").value = parts[1];
+      $("posTo").value = parts[2];
+      $("qty").value = parts[3];
+      await addRowFromInputs();
+    }
+
+    async function copyTable(){
+      if(!ROWS.length) return alert("No hay registros para copiar.");
+
+      const header = ["codigo","posicion(from)","posicion(to)","qty"].join("\t");
+      const lines = ROWS
+        .slice()
+        .reverse()
+        .map(r => [r.codigo, r.from, r.to, r.qty].join("\t"));
+      const text = [header, ...lines].join("\n");
+
+      try{
+        await navigator.clipboard.writeText(text);
+        alert("Copiado. Pega directo en Excel.");
+      }catch{
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        alert("Copiado. Pega directo en Excel.");
+      }
+    }
+
+    function exportXlsx(){
+      if(!ROWS.length) return alert("No hay registros para exportar.");
+
+      const data = ROWS
+        .slice()
+        .reverse()
+        .map(r => ({
+          codigo: r.codigo,
+          "posicion(from)": r.from,
+          "posicion(to)": r.to,
+          qty: r.qty,
+          fecha: fmtDateFromFirestore(r.createdAt || r.fecha || "")
+        }));
+
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Movimientos");
+
+      const fname = `Perchar_Movimientos_${new Date().toISOString().slice(0,10)}.xlsx`;
+      XLSX.writeFile(wb, fname);
+    }
+
+    // ✅ Borrar TODO (colección completa) con batch
+    async function clearAll(){
+      const ok = confirm("¿Borrar TODO lo guardado en la nube (Firebase)?");
+      if(!ok) return;
+
+      try{
+        const snap = await getDocs(collection(db, COL));
+        if(snap.empty){
+          setStatusOk("No había registros");
+          return;
+        }
+
+        // Batch tiene límite de 500 operaciones
+        let batch = writeBatch(db);
+        let count = 0;
+
+        for(const d of snap.docs){
+          batch.delete(d.ref);
+          count++;
+          if(count % 450 === 0){
+            await batch.commit();
+            batch = writeBatch(db);
+          }
+        }
+        await batch.commit();
+        setStatusOk("Todo limpio");
+      }catch(e){
+        setStatusBad("Error al limpiar");
+        console.error(e);
+      }
+    }
+
+    // Eventos UI
+    $("btnAdd").addEventListener("click", addRowFromInputs);
+    $("btnPaste").addEventListener("click", pasteLine);
+    $("btnCopy").addEventListener("click", copyTable);
+    $("btnXlsx").addEventListener("click", exportXlsx);
+    $("btnClear").addEventListener("click", clearAll);
+
+    ["codigo","posFrom","posTo","qty"].forEach(id=>{
+      $(id).addEventListener("keydown", (e)=>{
+        if(e.key === "Enter") addRowFromInputs();
+      });
+    });
+
+    // Catálogo
+    buildCatalog();
+
+    // ✅ Listener en vivo (todas las PCs)
+    try{
+      const q = query(collection(db, COL), orderBy("createdAt", "desc"));
+      onSnapshot(q, (snap) => {
+        ROWS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        render(ROWS);
+        setStatusOk("Sincronizado");
+      }, (err) => {
+        setStatusBad("Sin permiso / error reglas");
+        console.error(err);
+      });
+    }catch(e){
+      setStatusBad("Error Firebase");
+      console.error(e);
+    }
+  </script>
+</body>
+</html>
