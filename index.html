@@ -430,24 +430,24 @@
     </section>
   </main>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import {
-      getFirestore, collection, addDoc, deleteDoc, getDocs, writeBatch, doc,
-      onSnapshot, query, orderBy, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, deleteDoc, getDocs, writeBatch, doc,
+    onSnapshot, query, orderBy, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "TU_API_KEY",
-      authDomain: "TU_AUTH_DOMAIN",
-      projectId: "TU_PROJECT_ID",
-      storageBucket: "TU_STORAGE_BUCKET",
-      messagingSenderId: "TU_MESSAGING_SENDER_ID",
-      appId: "TU_APP_ID"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyA1_yGJ2Z3jFZYzY5ZeQC1rlh1PFN5M_FU",
+    authDomain: "perchado-d3e5b.firebaseapp.com",
+    projectId: "perchado-d3e5b",
+    storageBucket: "perchado-d3e5b.firebasestorage.app",
+    messagingSenderId: "117418842657",
+    appId: "1:117418842657:web:8da093b7d020884deb6160"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
     const COL = "perchar_movimientos";
     const COL_PALLETS = "perchar_pallets";
@@ -1085,3 +1085,4 @@
   </script>
 </body>
 </html>
+
