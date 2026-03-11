@@ -24,10 +24,10 @@
     .content{padding:14px 16px}
 
     .row{display:grid;grid-template-columns:1fr 1fr 1fr .6fr;gap:10px;align-items:end}
-    .row5{display:grid;grid-template-columns:.9fr 1fr 1fr .8fr .8fr;gap:10px;align-items:end}
+    .row6{display:grid;grid-template-columns:.9fr 1fr .9fr .9fr .8fr .8fr;gap:10px;align-items:end}
     @media (max-width: 900px){
       .row{grid-template-columns:1fr 1fr}
-      .row5{grid-template-columns:1fr 1fr}
+      .row6{grid-template-columns:1fr 1fr}
     }
 
     label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
@@ -112,7 +112,6 @@
     .mItem{border-top:1px solid var(--line);padding:12px 14px;display:grid;gap:8px}
     .mTop{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:900}
     .mMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:var(--muted);font-size:12px;font-weight:800}
-    .mMeta.three{grid-template-columns:1fr 1fr 1fr}
     .mMeta div{background:#F5FBFA;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
     .mActions{display:flex;justify-content:flex-end}
 
@@ -147,7 +146,6 @@
         <button class="tab-btn" data-tab="tab-pallets">Registro por pallet</button>
       </div>
 
-      <!-- TAB 1 -->
       <div class="tab-panel active" id="tab-movimientos">
         <h2>
           Panel | Ingreso de movimientos
@@ -161,26 +159,19 @@
           <div class="row">
             <div>
               <label for="codigo">Código</label>
-              <input id="codigo" placeholder="Ej: 12760 o TODO"
-                autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              <input id="codigo" placeholder="Ej: 12760 o TODO" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
             </div>
-
             <div>
               <label for="posFrom">Posición (From)</label>
-              <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02"
-                autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
             </div>
-
             <div>
               <label for="posTo">Posición (To)</label>
-              <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03"
-                autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
             </div>
-
             <div>
               <label for="qty">Qty</label>
-              <input id="qty" placeholder="Ej: 50 o TODO"
-                autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              <input id="qty" placeholder="Ej: 50 o TODO" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
             </div>
           </div>
 
@@ -199,8 +190,7 @@
               <label for="mCodigo">Código</label>
               <div class="keyRow">
                 <div class="keyWrap">
-                  <input id="mCodigo" placeholder="Código (12760 o TODO)"
-                    autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                  <input id="mCodigo" placeholder="Código (12760 o TODO)" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
                 </div>
                 <button class="keyBtn" type="button" data-target="mCodigo">ABC</button>
               </div>
@@ -210,8 +200,7 @@
               <label for="mFrom">Posición (From)</label>
               <div class="keyRow">
                 <div class="keyWrap">
-                  <input id="mFrom" list="locList" placeholder="Buscar ubicación…"
-                    autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                  <input id="mFrom" list="locList" placeholder="Buscar ubicación…" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
                 </div>
                 <button class="keyBtn" type="button" data-target="mFrom">ABC</button>
               </div>
@@ -221,8 +210,7 @@
               <label for="mTo">Posición (To)</label>
               <div class="keyRow">
                 <div class="keyWrap">
-                  <input id="mTo" list="locList" placeholder="Buscar ubicación…"
-                    autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                  <input id="mTo" list="locList" placeholder="Buscar ubicación…" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
                 </div>
                 <button class="keyBtn" type="button" data-target="mTo">ABC</button>
               </div>
@@ -232,8 +220,7 @@
               <label for="mQty">Qty</label>
               <div class="keyRow">
                 <div class="keyWrap">
-                  <input id="mQty" placeholder="Cantidad o TODO"
-                    autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                  <input id="mQty" placeholder="Cantidad o TODO" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
                 </div>
                 <button class="keyBtn" type="button" data-target="mQty">ABC</button>
               </div>
@@ -251,7 +238,6 @@
 
         <section class="card" style="margin:0 16px 16px;border-radius:16px;box-shadow:none">
           <h2>Tabla | Movimientos generados</h2>
-
           <div class="twrap">
             <table>
               <colgroup>
@@ -275,12 +261,10 @@
               <tbody id="tbody"></tbody>
             </table>
           </div>
-
           <div class="mobileList" id="mobileList"></div>
         </section>
       </div>
 
-      <!-- TAB 2 -->
       <div class="tab-panel" id="tab-pallets">
         <h2>
           Panel | Registro por pallet
@@ -299,7 +283,7 @@
         </div>
 
         <div class="content desktopPanel">
-          <div class="row5">
+          <div class="row6">
             <div>
               <label for="pCodigo">Código</label>
               <input id="pCodigo" placeholder="Ej: 36152" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
@@ -311,8 +295,13 @@
             </div>
 
             <div>
-              <label for="pComentario">Caducidad / Comentario</label>
-              <input id="pComentario" placeholder="Ej: 08-29" autocomplete="off" type="text" />
+              <label for="pCaducidad">Caducidad</label>
+              <input id="pCaducidad" placeholder="Ej: 08-29" autocomplete="off" type="text" />
+            </div>
+
+            <div>
+              <label for="pLote">Lote</label>
+              <input id="pLote" placeholder="Ej: AB123" autocomplete="off" type="text" inputmode="text" />
             </div>
 
             <div>
@@ -366,10 +355,20 @@
             </div>
 
             <div class="big">
-              <label for="mpComentario">Caducidad / Comentario</label>
+              <label for="mpCaducidad">Caducidad</label>
               <div class="keyRow">
                 <div class="keyWrap">
-                  <input id="mpComentario" placeholder="Ej: 08-29" autocomplete="off" type="text" inputmode="text" />
+                  <input id="mpCaducidad" placeholder="Ej: 08-29" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <button class="keyBtn" type="button" data-target="mpCaducidad">ABC</button>
+              </div>
+            </div>
+
+            <div class="big">
+              <label for="mpLote">Lote</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mpLote" placeholder="Ej: AB123" autocomplete="off" type="text" inputmode="text" />
                 </div>
               </div>
             </div>
@@ -402,8 +401,9 @@
               <colgroup>
                 <col style="width:130px">
                 <col style="width:130px">
-                <col style="width:28%">
                 <col style="width:22%">
+                <col style="width:16%">
+                <col style="width:16%">
                 <col style="width:100px">
                 <col style="width:170px">
                 <col style="width:120px">
@@ -413,7 +413,8 @@
                   <th>Pallet</th>
                   <th>Código</th>
                   <th>Posición</th>
-                  <th>Caducidad / Comentario</th>
+                  <th>Caducidad</th>
+                  <th>Lote</th>
                   <th class="right">Qty</th>
                   <th>Fecha</th>
                   <th>Acción</th>
@@ -437,12 +438,12 @@
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyA1_yGJ2Z3jFZYzY5ZeQC1rlh1PFN5M_FU",
-      authDomain: "perchado-d3e5b.firebaseapp.com",
-      projectId: "perchado-d3e5b",
-      storageBucket: "perchado-d3e5b.firebasestorage.app",
-      messagingSenderId: "117418842657",
-      appId: "1:117418842657:web:8da093b7d020884deb6160"
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_AUTH_DOMAIN",
+      projectId: "TU_PROJECT_ID",
+      storageBucket: "TU_STORAGE_BUCKET",
+      messagingSenderId: "TU_MESSAGING_SENDER_ID",
+      appId: "TU_APP_ID"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -454,8 +455,11 @@
     const $ = (id) => document.getElementById(id);
     const pad = (n) => String(n).padStart(2,"0");
     const esc = (s) => String(s ?? "")
-      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
 
     function fmtDate(ts){
       try{
@@ -465,7 +469,9 @@
           return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
         }
         return String(ts);
-      }catch{ return ""; }
+      }catch{
+        return "";
+      }
     }
 
     function buildCatalog(){
@@ -481,6 +487,7 @@
           frag.appendChild(opt);
         }
       }
+
       ["Bulk_CW1","Bulk_CW2","Bulk_CW3","Bulk_CW4","Bulk_CW5","Bulk_CW6","Inb_PL-CW","Papeleria","Compra Local"]
         .forEach(v=>{
           const opt = document.createElement("option");
@@ -524,6 +531,7 @@
         `;
         tb.appendChild(tr);
       }
+
       tb.querySelectorAll("button[data-id]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const id = btn.getAttribute("data-id");
@@ -554,6 +562,7 @@
         `;
         box.appendChild(item);
       }
+
       box.querySelectorAll("button[data-id]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const id = btn.getAttribute("data-id");
@@ -578,13 +587,15 @@
           <td title="${esc(r.pallet)}">${esc(r.pallet)}</td>
           <td title="${esc(r.codigo)}">${esc(r.codigo)}</td>
           <td title="${esc(r.posicion)}">${esc(r.posicion)}</td>
-          <td title="${esc(r.comentario)}">${esc(r.comentario || "")}</td>
+          <td title="${esc(r.caducidad)}">${esc(r.caducidad || "")}</td>
+          <td title="${esc(r.lote)}">${esc(r.lote || "")}</td>
           <td class="right" title="${esc(r.qty)}">${esc(r.qty)}</td>
           <td title="${esc(fecha)}">${esc(fecha)}</td>
           <td><button class="btn-del" data-pallet-id="${r.id}">Eliminar</button></td>
         `;
         tb.appendChild(tr);
       }
+
       tb.querySelectorAll("button[data-pallet-id]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const id = btn.getAttribute("data-pallet-id");
@@ -605,10 +616,11 @@
             <div>${esc(r.pallet)} <span style="color:var(--muted);font-weight:800">• ${esc(r.codigo)}</span></div>
             <div style="color:var(--muted);font-size:12px;font-weight:800">${esc(fecha)}</div>
           </div>
-          <div class="mMeta three">
+          <div class="mMeta">
             <div><b style="color:var(--ink)">Posición</b><br>${esc(r.posicion)}</div>
             <div><b style="color:var(--ink)">Qty</b><br>${esc(r.qty)}</div>
-            <div><b style="color:var(--ink)">Caducidad</b><br>${esc(r.comentario || "")}</div>
+            <div><b style="color:var(--ink)">Caducidad</b><br>${esc(r.caducidad || "")}</div>
+            <div><b style="color:var(--ink)">Lote</b><br>${esc(r.lote || "")}</div>
           </div>
           <div class="mActions">
             <button class="btn-del" data-pallet-id="${r.id}">Eliminar</button>
@@ -616,6 +628,7 @@
         `;
         box.appendChild(item);
       }
+
       box.querySelectorAll("button[data-pallet-id]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const id = btn.getAttribute("data-pallet-id");
@@ -662,11 +675,12 @@
       });
     }
 
-    async function addPalletRecord({pallet, codigo, posicion, comentario, qty}){
+    async function addPalletRecord({pallet, codigo, posicion, caducidad, lote, qty}){
       const p = String(pallet ?? "").trim();
       const c = String(codigo ?? "").trim();
       const pos = String(posicion ?? "").trim();
-      const com = String(comentario ?? "").trim();
+      const cad = String(caducidad ?? "").trim();
+      const lot = String(lote ?? "").trim();
 
       if(!p) return alert("Falta el Pallet activo.");
       if(!c) return alert("Falta el Código.");
@@ -679,7 +693,8 @@
         pallet: p,
         codigo: c,
         posicion: pos,
-        comentario: com,
+        caducidad: cad,
+        lote: lot,
         qty: vq.value,
         createdAt: serverTimestamp()
       });
@@ -706,14 +721,16 @@
         pallet: $("palletActivo").value,
         codigo: $("pCodigo").value,
         posicion: $("pPosicion").value,
-        comentario: $("pComentario").value,
+        caducidad: $("pCaducidad").value,
+        lote: $("pLote").value,
         qty: $("pQty").value
       };
     }
     function clearPalletDesktopInputs(){
       $("pCodigo").value="";
       $("pPosicion").value="";
-      $("pComentario").value="";
+      $("pCaducidad").value="";
+      $("pLote").value="";
       $("pQty").value="";
       $("pCodigo").focus();
     }
@@ -723,14 +740,16 @@
         pallet: $("mpalletActivo").value,
         codigo: $("mpCodigo").value,
         posicion: $("mpPosicion").value,
-        comentario: $("mpComentario").value,
+        caducidad: $("mpCaducidad").value,
+        lote: $("mpLote").value,
         qty: $("mpQty").value
       };
     }
     function clearPalletMobileInputs(){
       $("mpCodigo").value="";
       $("mpPosicion").value="";
-      $("mpComentario").value="";
+      $("mpCaducidad").value="";
+      $("mpLote").value="";
       $("mpQty").value="";
       $("mpCodigo").focus();
     }
@@ -744,7 +763,7 @@
     }
 
     async function pasteLineInto(which){
-      const raw = prompt("Pega: codigo  from  to  qty (qty puede ser TODO)");
+      const raw = prompt("Pega: codigo  from  to  qty");
       if(!raw) return;
       const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
       if(parts.length < 4) return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50");
@@ -769,25 +788,32 @@
     }
 
     async function pastePalletLineInto(which){
-      const raw = prompt("Pega: codigo  posicion  qty  comentario\nEj: 36152 01-30-088-02 50 08-29");
+      const raw = prompt("Pega: codigo  posicion  qty  caducidad  lote\nEj: 36152 01-30-088-02 50 08-29 AB123");
       if(!raw) return;
-      const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
-      if(parts.length < 4) return alert("Formato inválido. Ej: 36152 01-30-088-02 50 08-29");
 
-      const comentarioVal = parts.slice(3).join(" ");
+      const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
+      if(parts.length < 5) return alert("Formato inválido. Ej: 36152 01-30-088-02 50 08-29 AB123");
+
+      const codigo = parts[0];
+      const posicion = parts[1];
+      const qty = parts[2];
+      const caducidad = parts[3];
+      const lote = parts.slice(4).join(" ");
 
       if(which === "mobile"){
-        $("mpCodigo").value = parts[0];
-        $("mpPosicion").value = parts[1];
-        $("mpQty").value = parts[2];
-        $("mpComentario").value = comentarioVal;
+        $("mpCodigo").value = codigo;
+        $("mpPosicion").value = posicion;
+        $("mpQty").value = qty;
+        $("mpCaducidad").value = caducidad;
+        $("mpLote").value = lote;
         await addPalletRecord(readPalletMobileInputs());
         clearPalletMobileInputs();
       }else{
-        $("pCodigo").value = parts[0];
-        $("pPosicion").value = parts[1];
-        $("pQty").value = parts[2];
-        $("pComentario").value = comentarioVal;
+        $("pCodigo").value = codigo;
+        $("pPosicion").value = posicion;
+        $("pQty").value = qty;
+        $("pCaducidad").value = caducidad;
+        $("pLote").value = lote;
         await addPalletRecord(readPalletDesktopInputs());
         clearPalletDesktopInputs();
       }
@@ -798,23 +824,35 @@
       const header = ["codigo","posicion(from)","posicion(to)","qty"].join("\t");
       const lines = ROWS.slice().reverse().map(r => [r.codigo, r.from, r.to, r.qty].join("\t"));
       const text = [header, ...lines].join("\n");
-      try{ await navigator.clipboard.writeText(text); alert("Copiado. Pega directo en Excel."); }
-      catch{
-        const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta);
-        ta.select(); document.execCommand("copy"); ta.remove();
+      try{
+        await navigator.clipboard.writeText(text);
+        alert("Copiado. Pega directo en Excel.");
+      }catch{
+        const ta=document.createElement("textarea");
+        ta.value=text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
         alert("Copiado. Pega directo en Excel.");
       }
     }
 
     async function copyPalletTable(){
       if(!PALLET_ROWS.length) return alert("No hay registros para copiar.");
-      const header = ["pallet","codigo","posicion","caducidad/comentario","qty"].join("\t");
-      const lines = PALLET_ROWS.slice().reverse().map(r => [r.pallet, r.codigo, r.posicion, r.comentario || "", r.qty].join("\t"));
+      const header = ["pallet","codigo","posicion","caducidad","lote","qty"].join("\t");
+      const lines = PALLET_ROWS.slice().reverse().map(r => [r.pallet, r.codigo, r.posicion, r.caducidad || "", r.lote || "", r.qty].join("\t"));
       const text = [header, ...lines].join("\n");
-      try{ await navigator.clipboard.writeText(text); alert("Copiado. Pega directo en Excel."); }
-      catch{
-        const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta);
-        ta.select(); document.execCommand("copy"); ta.remove();
+      try{
+        await navigator.clipboard.writeText(text);
+        alert("Copiado. Pega directo en Excel.");
+      }catch{
+        const ta=document.createElement("textarea");
+        ta.value=text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
         alert("Copiado. Pega directo en Excel.");
       }
     }
@@ -840,7 +878,8 @@
         pallet: r.pallet,
         codigo: r.codigo,
         posicion: r.posicion,
-        "caducidad/comentario": r.comentario || "",
+        caducidad: r.caducidad || "",
+        lote: r.lote || "",
         qty: r.qty,
         fecha: fmtDate(r.createdAt || r.fecha || "")
       }));
@@ -890,7 +929,10 @@
       setPalletStatus(true,"Todo limpio");
     }
 
-    $("btnAdd").addEventListener("click", async ()=>{ await addMovement(readDesktopInputs()); clearDesktopInputs(); });
+    $("btnAdd").addEventListener("click", async ()=>{
+      await addMovement(readDesktopInputs());
+      clearDesktopInputs();
+    });
     $("btnPaste").addEventListener("click", ()=>pasteLineInto("desktop"));
     $("btnCopy").addEventListener("click", copyTable);
     $("btnXlsx").addEventListener("click", exportXlsx);
@@ -898,11 +940,17 @@
 
     ["codigo","posFrom","posTo","qty"].forEach(id=>{
       $(id).addEventListener("keydown", async (e)=>{
-        if(e.key==="Enter"){ await addMovement(readDesktopInputs()); clearDesktopInputs(); }
+        if(e.key==="Enter"){
+          await addMovement(readDesktopInputs());
+          clearDesktopInputs();
+        }
       });
     });
 
-    $("mAdd").addEventListener("click", async ()=>{ await addMovement(readMobileInputs()); clearMobileInputs(); });
+    $("mAdd").addEventListener("click", async ()=>{
+      await addMovement(readMobileInputs());
+      clearMobileInputs();
+    });
     $("mPaste").addEventListener("click", ()=>pasteLineInto("mobile"));
     $("mCopy").addEventListener("click", copyTable);
     $("mXlsx").addEventListener("click", exportXlsx);
@@ -910,7 +958,10 @@
 
     ["mCodigo","mFrom","mTo","mQty"].forEach(id=>{
       $(id).addEventListener("keydown", async (e)=>{
-        if(e.key==="Enter"){ await addMovement(readMobileInputs()); clearMobileInputs(); }
+        if(e.key==="Enter"){
+          await addMovement(readMobileInputs());
+          clearMobileInputs();
+        }
       });
     });
 
@@ -924,7 +975,7 @@
     $("btnPalletXlsx").addEventListener("click", exportPalletXlsx);
     $("btnPalletClear").addEventListener("click", clearAllPallets);
 
-    ["pCodigo","pPosicion","pComentario","pQty"].forEach(id=>{
+    ["pCodigo","pPosicion","pCaducidad","pLote","pQty"].forEach(id=>{
       $(id).addEventListener("keydown", async (e)=>{
         if(e.key==="Enter"){
           syncPalletInputs("desktop");
@@ -944,7 +995,7 @@
     $("mPalletXlsx").addEventListener("click", exportPalletXlsx);
     $("mPalletClear").addEventListener("click", clearAllPallets);
 
-    ["mpCodigo","mpPosicion","mpComentario","mpQty"].forEach(id=>{
+    ["mpCodigo","mpPosicion","mpCaducidad","mpLote","mpQty"].forEach(id=>{
       $(id).addEventListener("keydown", async (e)=>{
         if(e.key==="Enter"){
           syncPalletInputs("mobile");
