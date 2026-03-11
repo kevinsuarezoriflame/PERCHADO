@@ -24,7 +24,11 @@
     .content{padding:14px 16px}
 
     .row{display:grid;grid-template-columns:1fr 1fr 1fr .6fr;gap:10px;align-items:end}
-    @media (max-width: 900px){ .row{grid-template-columns:1fr 1fr} }
+    .row5{display:grid;grid-template-columns:.9fr 1fr 1fr .8fr .8fr;gap:10px;align-items:end}
+    @media (max-width: 900px){
+      .row{grid-template-columns:1fr 1fr}
+      .row5{grid-template-columns:1fr 1fr}
+    }
 
     label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
     input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;outline:none;font-size:14px;background:#fff}
@@ -41,7 +45,36 @@
     .status.ok{color:var(--accent2)}
     .status.bad{color:#8A1E1E}
 
-    /* TABLA DESKTOP */
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px 0}
+    .tab-btn{
+      border:1px solid var(--line);
+      background:#F5FBFA;
+      color:var(--muted);
+      padding:10px 14px;
+      border-radius:12px 12px 0 0;
+      font-weight:800;
+    }
+    .tab-btn.active{
+      background:var(--card);
+      color:var(--accent2);
+      border-color:var(--line);
+      border-bottom:1px solid var(--card);
+      position:relative;
+      top:1px;
+    }
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    .palletBar{
+      display:flex;gap:10px;align-items:end;flex-wrap:wrap;
+      padding:0 16px 14px;
+    }
+    .palletBox{min-width:220px;max-width:320px;flex:1}
+    .helper{
+      font-size:12px;color:var(--muted);font-weight:700;
+      padding:10px 12px;border-radius:12px;background:#F5FBFA;border:1px solid var(--line)
+    }
+
     .twrap{max-height:520px;overflow:auto;border-top:1px solid var(--line)}
     table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;table-layout:fixed}
     thead th{text-align:left;padding:10px 12px;background:#E8F7F3;color:#0D3B30;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2;white-space:nowrap}
@@ -50,7 +83,6 @@
     .right{text-align:right}
     .btn-del{padding:9px 12px;border-radius:12px;font-weight:900;border:1px solid rgba(227,91,91,.35);background:#FFECEC;color:#8A1E1E;cursor:pointer;white-space:nowrap}
 
-    /* PANEL OPERADOR (móvil) */
     .operator{display:none}
     .operator .grid{display:grid;grid-template-columns:1fr;gap:10px}
     .operator .big input{font-size:16px;padding:14px 14px;border-radius:14px}
@@ -58,7 +90,6 @@
     .operator .btnbar button{padding:14px 14px;border-radius:14px;font-size:15px}
     .operator .btnbar .span2{grid-column:1 / -1}
 
-    /* Toggle teclado (NUM / ABC) */
     .keyRow{display:flex; gap:10px; align-items:center}
     .keyRow .keyWrap{flex:1}
     .keyBtn{
@@ -77,17 +108,18 @@
       border-color:transparent;
     }
 
-    /* LISTA MÓVIL */
     .mobileList{display:none}
     .mItem{border-top:1px solid var(--line);padding:12px 14px;display:grid;gap:8px}
     .mTop{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:900}
     .mMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:var(--muted);font-size:12px;font-weight:800}
+    .mMeta.three{grid-template-columns:1fr 1fr 1fr}
     .mMeta div{background:#F5FBFA;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
     .mActions{display:flex;justify-content:flex-end}
 
     @media (max-width:560px){
       main{padding:0 12px 22px}
       .content{padding:12px}
+      .palletBar{padding:0 12px 12px}
       .desktopPanel{display:none}
       .operator{display:block}
       .twrap{display:none}
@@ -110,137 +142,290 @@
     <datalist id="locList"></datalist>
 
     <section class="card">
-      <h2>
-        Panel | Ingreso de movimientos
-        <span>
-          <span class="tag" id="countTag">0 registros</span>
-          <span class="status" id="syncStatus">Sincronizando…</span>
-        </span>
-      </h2>
-
-      <!-- DESKTOP -->
-      <div class="content desktopPanel">
-        <div class="row">
-          <div>
-            <label for="codigo">Código</label>
-            <input id="codigo" placeholder="Ej: 12760 o TODO"
-              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-          </div>
-
-          <div>
-            <label for="posFrom">Posición (From)</label>
-            <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02"
-              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-          </div>
-
-          <div>
-            <label for="posTo">Posición (To)</label>
-            <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03"
-              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-          </div>
-
-          <div>
-            <label for="qty">Qty</label>
-            <input id="qty" placeholder="Ej: 50 o TODO"
-              autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-          </div>
-        </div>
-
-        <div class="btnbar">
-          <button class="btn-primary" id="btnAdd">+ Agregar</button>
-          <button class="btn-secondary" id="btnPaste">Pegar línea</button>
-          <button class="btn-secondary" id="btnCopy">Copiar tabla</button>
-          <button class="btn-secondary" id="btnXlsx">Descargar Excel</button>
-          <button class="btn-danger" id="btnClear">Limpiar todo</button>
-        </div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-movimientos">Movimientos</button>
+        <button class="tab-btn" data-tab="tab-pallets">Registro por pallet</button>
       </div>
 
-      <!-- MÓVIL OPERADOR -->
-      <div class="content operator">
-        <div class="grid">
-          <div class="big">
-            <label for="mCodigo">Código</label>
-            <div class="keyRow">
-              <div class="keyWrap">
-                <input id="mCodigo" placeholder="Código (12760 o TODO)"
-                  autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-              </div>
-              <button class="keyBtn" type="button" data-target="mCodigo">ABC</button>
-            </div>
-          </div>
+      <!-- TAB 1 -->
+      <div class="tab-panel active" id="tab-movimientos">
+        <h2>
+          Panel | Ingreso de movimientos
+          <span>
+            <span class="tag" id="countTag">0 registros</span>
+            <span class="status" id="syncStatus">Sincronizando…</span>
+          </span>
+        </h2>
 
-          <div class="big">
-            <label for="mFrom">Posición (From)</label>
-            <div class="keyRow">
-              <div class="keyWrap">
-                <input id="mFrom" list="locList" placeholder="Buscar ubicación…"
-                  autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-              </div>
-              <button class="keyBtn" type="button" data-target="mFrom">ABC</button>
+        <div class="content desktopPanel">
+          <div class="row">
+            <div>
+              <label for="codigo">Código</label>
+              <input id="codigo" placeholder="Ej: 12760 o TODO"
+                autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
             </div>
-          </div>
 
-          <div class="big">
-            <label for="mTo">Posición (To)</label>
-            <div class="keyRow">
-              <div class="keyWrap">
-                <input id="mTo" list="locList" placeholder="Buscar ubicación…"
-                  autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-              </div>
-              <button class="keyBtn" type="button" data-target="mTo">ABC</button>
+            <div>
+              <label for="posFrom">Posición (From)</label>
+              <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02"
+                autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
             </div>
-          </div>
 
-          <div class="big">
-            <label for="mQty">Qty</label>
-            <div class="keyRow">
-              <div class="keyWrap">
-                <input id="mQty" placeholder="Cantidad o TODO"
-                  autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-              </div>
-              <button class="keyBtn" type="button" data-target="mQty">ABC</button>
+            <div>
+              <label for="posTo">Posición (To)</label>
+              <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03"
+                autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+            </div>
+
+            <div>
+              <label for="qty">Qty</label>
+              <input id="qty" placeholder="Ej: 50 o TODO"
+                autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
             </div>
           </div>
 
           <div class="btnbar">
-            <button class="btn-primary span2" id="mAdd">+ Agregar</button>
-            <button class="btn-secondary" id="mPaste">Pegar</button>
-            <button class="btn-secondary" id="mCopy">Copiar</button>
-            <button class="btn-secondary" id="mXlsx">Excel</button>
-            <button class="btn-danger span2" id="mClear">Limpiar todo</button>
+            <button class="btn-primary" id="btnAdd">+ Agregar</button>
+            <button class="btn-secondary" id="btnPaste">Pegar línea</button>
+            <button class="btn-secondary" id="btnCopy">Copiar tabla</button>
+            <button class="btn-secondary" id="btnXlsx">Descargar Excel</button>
+            <button class="btn-danger" id="btnClear">Limpiar todo</button>
           </div>
         </div>
+
+        <div class="content operator">
+          <div class="grid">
+            <div class="big">
+              <label for="mCodigo">Código</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mCodigo" placeholder="Código (12760 o TODO)"
+                    autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <button class="keyBtn" type="button" data-target="mCodigo">ABC</button>
+              </div>
+            </div>
+
+            <div class="big">
+              <label for="mFrom">Posición (From)</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mFrom" list="locList" placeholder="Buscar ubicación…"
+                    autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <button class="keyBtn" type="button" data-target="mFrom">ABC</button>
+              </div>
+            </div>
+
+            <div class="big">
+              <label for="mTo">Posición (To)</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mTo" list="locList" placeholder="Buscar ubicación…"
+                    autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <button class="keyBtn" type="button" data-target="mTo">ABC</button>
+              </div>
+            </div>
+
+            <div class="big">
+              <label for="mQty">Qty</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mQty" placeholder="Cantidad o TODO"
+                    autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <button class="keyBtn" type="button" data-target="mQty">ABC</button>
+              </div>
+            </div>
+
+            <div class="btnbar">
+              <button class="btn-primary span2" id="mAdd">+ Agregar</button>
+              <button class="btn-secondary" id="mPaste">Pegar</button>
+              <button class="btn-secondary" id="mCopy">Copiar</button>
+              <button class="btn-secondary" id="mXlsx">Excel</button>
+              <button class="btn-danger span2" id="mClear">Limpiar todo</button>
+            </div>
+          </div>
+        </div>
+
+        <section class="card" style="margin:0 16px 16px;border-radius:16px;box-shadow:none">
+          <h2>Tabla | Movimientos generados</h2>
+
+          <div class="twrap">
+            <table>
+              <colgroup>
+                <col style="width:140px">
+                <col style="width:38%">
+                <col style="width:38%">
+                <col style="width:90px">
+                <col style="width:170px">
+                <col style="width:120px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th class="right">Qty</th>
+                  <th>Fecha</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+
+          <div class="mobileList" id="mobileList"></div>
+        </section>
       </div>
-    </section>
 
-    <section class="card" style="margin-top:16px">
-      <h2>Tabla | Movimientos generados</h2>
+      <!-- TAB 2 -->
+      <div class="tab-panel" id="tab-pallets">
+        <h2>
+          Panel | Registro por pallet
+          <span>
+            <span class="tag" id="countPalletTag">0 registros</span>
+            <span class="status" id="syncPalletStatus">Sincronizando…</span>
+          </span>
+        </h2>
 
-      <div class="twrap">
-        <table>
-          <colgroup>
-            <col style="width:140px">
-            <col style="width:38%">
-            <col style="width:38%">
-            <col style="width:90px">
-            <col style="width:170px">
-            <col style="width:120px">
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>From</th>
-              <th>To</th>
-              <th class="right">Qty</th>
-              <th>Fecha</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
+        <div class="palletBar">
+          <div class="palletBox">
+            <label for="palletActivo">Pallet activo</label>
+            <input id="palletActivo" placeholder="Ej: Pallet 1" type="text" autocomplete="off" />
+          </div>
+          <div class="helper">Todo lo que registres en esta pestaña quedará asociado al pallet activo.</div>
+        </div>
+
+        <div class="content desktopPanel">
+          <div class="row5">
+            <div>
+              <label for="pCodigo">Código</label>
+              <input id="pCodigo" placeholder="Ej: 36152" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+            </div>
+
+            <div>
+              <label for="pPosicion">Posición</label>
+              <input id="pPosicion" list="locList" placeholder="Ej: 01-30-088-02" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+            </div>
+
+            <div>
+              <label for="pComentario">Caducidad / Comentario</label>
+              <input id="pComentario" placeholder="Ej: 08-29" autocomplete="off" type="text" />
+            </div>
+
+            <div>
+              <label for="pQty">Cantidad</label>
+              <input id="pQty" placeholder="Ej: 50" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+            </div>
+
+            <div>
+              <label>&nbsp;</label>
+              <button class="btn-primary" id="btnPalletAdd" style="width:100%">+ Agregar</button>
+            </div>
+          </div>
+
+          <div class="btnbar">
+            <button class="btn-secondary" id="btnPalletPaste">Pegar línea</button>
+            <button class="btn-secondary" id="btnPalletCopy">Copiar tabla</button>
+            <button class="btn-secondary" id="btnPalletXlsx">Descargar Excel</button>
+            <button class="btn-danger" id="btnPalletClear">Limpiar todo</button>
+          </div>
+        </div>
+
+        <div class="content operator">
+          <div class="grid">
+            <div class="big">
+              <label for="mpalletActivo">Pallet activo</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mpalletActivo" placeholder="Ej: Pallet 1" autocomplete="off" type="text" inputmode="text" />
+                </div>
+              </div>
+            </div>
+
+            <div class="big">
+              <label for="mpCodigo">Código</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mpCodigo" placeholder="Código" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <button class="keyBtn" type="button" data-target="mpCodigo">ABC</button>
+              </div>
+            </div>
+
+            <div class="big">
+              <label for="mpPosicion">Posición</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mpPosicion" list="locList" placeholder="Buscar ubicación…" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <button class="keyBtn" type="button" data-target="mpPosicion">ABC</button>
+              </div>
+            </div>
+
+            <div class="big">
+              <label for="mpComentario">Caducidad / Comentario</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mpComentario" placeholder="Ej: 08-29" autocomplete="off" type="text" inputmode="text" />
+                </div>
+              </div>
+            </div>
+
+            <div class="big">
+              <label for="mpQty">Cantidad</label>
+              <div class="keyRow">
+                <div class="keyWrap">
+                  <input id="mpQty" placeholder="Cantidad" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                </div>
+                <button class="keyBtn" type="button" data-target="mpQty">ABC</button>
+              </div>
+            </div>
+
+            <div class="btnbar">
+              <button class="btn-primary span2" id="mPalletAdd">+ Agregar</button>
+              <button class="btn-secondary" id="mPalletPaste">Pegar</button>
+              <button class="btn-secondary" id="mPalletCopy">Copiar</button>
+              <button class="btn-secondary" id="mPalletXlsx">Excel</button>
+              <button class="btn-danger span2" id="mPalletClear">Limpiar todo</button>
+            </div>
+          </div>
+        </div>
+
+        <section class="card" style="margin:0 16px 16px;border-radius:16px;box-shadow:none">
+          <h2>Tabla | Registros por pallet</h2>
+
+          <div class="twrap">
+            <table>
+              <colgroup>
+                <col style="width:130px">
+                <col style="width:130px">
+                <col style="width:28%">
+                <col style="width:22%">
+                <col style="width:100px">
+                <col style="width:170px">
+                <col style="width:120px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Pallet</th>
+                  <th>Código</th>
+                  <th>Posición</th>
+                  <th>Caducidad / Comentario</th>
+                  <th class="right">Qty</th>
+                  <th>Fecha</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyPallet"></tbody>
+            </table>
+          </div>
+
+          <div class="mobileList" id="mobilePalletList"></div>
+        </section>
       </div>
-
-      <div class="mobileList" id="mobileList"></div>
     </section>
   </main>
 
@@ -262,7 +447,9 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
     const COL = "perchar_movimientos";
+    const COL_PALLETS = "perchar_pallets";
 
     const $ = (id) => document.getElementById(id);
     const pad = (n) => String(n).padStart(2,"0");
@@ -305,9 +492,17 @@
     }
 
     let ROWS = [];
+    let PALLET_ROWS = [];
 
     function setStatus(ok, msg){
       const el = $("syncStatus");
+      el.textContent = msg;
+      el.classList.remove("ok","bad");
+      el.classList.add(ok ? "ok" : "bad");
+    }
+
+    function setPalletStatus(ok, msg){
+      const el = $("syncPalletStatus");
       el.textContent = msg;
       el.classList.remove("ok","bad");
       el.classList.add(ok ? "ok" : "bad");
@@ -373,7 +568,68 @@
       renderMobile(rows);
     }
 
-    // Qty: acepta número (>0) o texto (TODO). No puede ir vacío.
+    function renderPalletDesktop(rows){
+      const tb = $("tbodyPallet");
+      tb.innerHTML = "";
+      for(const r of rows){
+        const fecha = fmtDate(r.createdAt || r.fecha || "");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td title="${esc(r.pallet)}">${esc(r.pallet)}</td>
+          <td title="${esc(r.codigo)}">${esc(r.codigo)}</td>
+          <td title="${esc(r.posicion)}">${esc(r.posicion)}</td>
+          <td title="${esc(r.comentario)}">${esc(r.comentario || "")}</td>
+          <td class="right" title="${esc(r.qty)}">${esc(r.qty)}</td>
+          <td title="${esc(fecha)}">${esc(fecha)}</td>
+          <td><button class="btn-del" data-pallet-id="${r.id}">Eliminar</button></td>
+        `;
+        tb.appendChild(tr);
+      }
+      tb.querySelectorAll("button[data-pallet-id]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.getAttribute("data-pallet-id");
+          await deleteDoc(doc(db, COL_PALLETS, id));
+        });
+      });
+    }
+
+    function renderPalletMobile(rows){
+      const box = $("mobilePalletList");
+      box.innerHTML = "";
+      for(const r of rows){
+        const fecha = fmtDate(r.createdAt || r.fecha || "");
+        const item = document.createElement("div");
+        item.className = "mItem";
+        item.innerHTML = `
+          <div class="mTop">
+            <div>${esc(r.pallet)} <span style="color:var(--muted);font-weight:800">• ${esc(r.codigo)}</span></div>
+            <div style="color:var(--muted);font-size:12px;font-weight:800">${esc(fecha)}</div>
+          </div>
+          <div class="mMeta three">
+            <div><b style="color:var(--ink)">Posición</b><br>${esc(r.posicion)}</div>
+            <div><b style="color:var(--ink)">Qty</b><br>${esc(r.qty)}</div>
+            <div><b style="color:var(--ink)">Caducidad</b><br>${esc(r.comentario || "")}</div>
+          </div>
+          <div class="mActions">
+            <button class="btn-del" data-pallet-id="${r.id}">Eliminar</button>
+          </div>
+        `;
+        box.appendChild(item);
+      }
+      box.querySelectorAll("button[data-pallet-id]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.getAttribute("data-pallet-id");
+          await deleteDoc(doc(db, COL_PALLETS, id));
+        });
+      });
+    }
+
+    function renderAllPallet(rows){
+      $("countPalletTag").textContent = `${rows.length} registros`;
+      renderPalletDesktop(rows);
+      renderPalletMobile(rows);
+    }
+
     function validateQty(qtyRaw){
       const s = String(qtyRaw ?? "").trim();
       if(!s) return { ok:false, msg:"Qty vacío." };
@@ -406,6 +662,29 @@
       });
     }
 
+    async function addPalletRecord({pallet, codigo, posicion, comentario, qty}){
+      const p = String(pallet ?? "").trim();
+      const c = String(codigo ?? "").trim();
+      const pos = String(posicion ?? "").trim();
+      const com = String(comentario ?? "").trim();
+
+      if(!p) return alert("Falta el Pallet activo.");
+      if(!c) return alert("Falta el Código.");
+      if(!pos) return alert("Falta la Posición.");
+
+      const vq = validateQty(qty);
+      if(!vq.ok) return alert(vq.msg);
+
+      await addDoc(collection(db, COL_PALLETS), {
+        pallet: p,
+        codigo: c,
+        posicion: pos,
+        comentario: com,
+        qty: vq.value,
+        createdAt: serverTimestamp()
+      });
+    }
+
     function readDesktopInputs(){
       return { codigo: $("codigo").value, from: $("posFrom").value, to: $("posTo").value, qty: $("qty").value };
     }
@@ -422,11 +701,53 @@
       $("mCodigo").focus();
     }
 
+    function readPalletDesktopInputs(){
+      return {
+        pallet: $("palletActivo").value,
+        codigo: $("pCodigo").value,
+        posicion: $("pPosicion").value,
+        comentario: $("pComentario").value,
+        qty: $("pQty").value
+      };
+    }
+    function clearPalletDesktopInputs(){
+      $("pCodigo").value="";
+      $("pPosicion").value="";
+      $("pComentario").value="";
+      $("pQty").value="";
+      $("pCodigo").focus();
+    }
+
+    function readPalletMobileInputs(){
+      return {
+        pallet: $("mpalletActivo").value,
+        codigo: $("mpCodigo").value,
+        posicion: $("mpPosicion").value,
+        comentario: $("mpComentario").value,
+        qty: $("mpQty").value
+      };
+    }
+    function clearPalletMobileInputs(){
+      $("mpCodigo").value="";
+      $("mpPosicion").value="";
+      $("mpComentario").value="";
+      $("mpQty").value="";
+      $("mpCodigo").focus();
+    }
+
+    function syncPalletInputs(source){
+      if(source === "desktop"){
+        $("mpalletActivo").value = $("palletActivo").value;
+      }else{
+        $("palletActivo").value = $("mpalletActivo").value;
+      }
+    }
+
     async function pasteLineInto(which){
       const raw = prompt("Pega: codigo  from  to  qty (qty puede ser TODO)");
       if(!raw) return;
       const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
-      if(parts.length < 4) return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50 (o TODO)");
+      if(parts.length < 4) return alert("Formato inválido. Ej: 12760 01-30-088-02 01-30-088-03 50");
 
       const qtyVal = parts.slice(3).join(" ");
 
@@ -447,10 +768,48 @@
       }
     }
 
+    async function pastePalletLineInto(which){
+      const raw = prompt("Pega: codigo  posicion  qty  comentario\nEj: 36152 01-30-088-02 50 08-29");
+      if(!raw) return;
+      const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
+      if(parts.length < 4) return alert("Formato inválido. Ej: 36152 01-30-088-02 50 08-29");
+
+      const comentarioVal = parts.slice(3).join(" ");
+
+      if(which === "mobile"){
+        $("mpCodigo").value = parts[0];
+        $("mpPosicion").value = parts[1];
+        $("mpQty").value = parts[2];
+        $("mpComentario").value = comentarioVal;
+        await addPalletRecord(readPalletMobileInputs());
+        clearPalletMobileInputs();
+      }else{
+        $("pCodigo").value = parts[0];
+        $("pPosicion").value = parts[1];
+        $("pQty").value = parts[2];
+        $("pComentario").value = comentarioVal;
+        await addPalletRecord(readPalletDesktopInputs());
+        clearPalletDesktopInputs();
+      }
+    }
+
     async function copyTable(){
       if(!ROWS.length) return alert("No hay registros para copiar.");
       const header = ["codigo","posicion(from)","posicion(to)","qty"].join("\t");
       const lines = ROWS.slice().reverse().map(r => [r.codigo, r.from, r.to, r.qty].join("\t"));
+      const text = [header, ...lines].join("\n");
+      try{ await navigator.clipboard.writeText(text); alert("Copiado. Pega directo en Excel."); }
+      catch{
+        const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); ta.remove();
+        alert("Copiado. Pega directo en Excel.");
+      }
+    }
+
+    async function copyPalletTable(){
+      if(!PALLET_ROWS.length) return alert("No hay registros para copiar.");
+      const header = ["pallet","codigo","posicion","caducidad/comentario","qty"].join("\t");
+      const lines = PALLET_ROWS.slice().reverse().map(r => [r.pallet, r.codigo, r.posicion, r.comentario || "", r.qty].join("\t"));
       const text = [header, ...lines].join("\n");
       try{ await navigator.clipboard.writeText(text); alert("Copiado. Pega directo en Excel."); }
       catch{
@@ -475,6 +834,22 @@
       XLSX.writeFile(wb, `Perchar_Movimientos_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
 
+    function exportPalletXlsx(){
+      if(!PALLET_ROWS.length) return alert("No hay registros para exportar.");
+      const data = PALLET_ROWS.slice().reverse().map(r => ({
+        pallet: r.pallet,
+        codigo: r.codigo,
+        posicion: r.posicion,
+        "caducidad/comentario": r.comentario || "",
+        qty: r.qty,
+        fecha: fmtDate(r.createdAt || r.fecha || "")
+      }));
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Pallets");
+      XLSX.writeFile(wb, `Perchar_Pallets_${new Date().toISOString().slice(0,10)}.xlsx`);
+    }
+
     async function clearAll(){
       const ok = confirm("¿Borrar TODO lo guardado en la nube (Firebase)?");
       if(!ok) return;
@@ -495,31 +870,93 @@
       setStatus(true,"Todo limpio");
     }
 
-    // Eventos Desktop
+    async function clearAllPallets(){
+      const ok = confirm("¿Borrar TODO lo guardado en registro por pallet?");
+      if(!ok) return;
+      const snap = await getDocs(collection(db, COL_PALLETS));
+      if(snap.empty) return setPalletStatus(true,"No había registros");
+
+      let batch = writeBatch(db);
+      let count = 0;
+      for(const d of snap.docs){
+        batch.delete(d.ref);
+        count++;
+        if(count % 450 === 0){
+          await batch.commit();
+          batch = writeBatch(db);
+        }
+      }
+      await batch.commit();
+      setPalletStatus(true,"Todo limpio");
+    }
+
     $("btnAdd").addEventListener("click", async ()=>{ await addMovement(readDesktopInputs()); clearDesktopInputs(); });
     $("btnPaste").addEventListener("click", ()=>pasteLineInto("desktop"));
     $("btnCopy").addEventListener("click", copyTable);
     $("btnXlsx").addEventListener("click", exportXlsx);
     $("btnClear").addEventListener("click", clearAll);
+
     ["codigo","posFrom","posTo","qty"].forEach(id=>{
       $(id).addEventListener("keydown", async (e)=>{
         if(e.key==="Enter"){ await addMovement(readDesktopInputs()); clearDesktopInputs(); }
       });
     });
 
-    // Eventos Mobile
     $("mAdd").addEventListener("click", async ()=>{ await addMovement(readMobileInputs()); clearMobileInputs(); });
     $("mPaste").addEventListener("click", ()=>pasteLineInto("mobile"));
     $("mCopy").addEventListener("click", copyTable);
     $("mXlsx").addEventListener("click", exportXlsx);
     $("mClear").addEventListener("click", clearAll);
+
     ["mCodigo","mFrom","mTo","mQty"].forEach(id=>{
       $(id).addEventListener("keydown", async (e)=>{
         if(e.key==="Enter"){ await addMovement(readMobileInputs()); clearMobileInputs(); }
       });
     });
 
-    // ✅ Toggle ABC/NUM en móvil
+    $("btnPalletAdd").addEventListener("click", async ()=>{
+      syncPalletInputs("desktop");
+      await addPalletRecord(readPalletDesktopInputs());
+      clearPalletDesktopInputs();
+    });
+    $("btnPalletPaste").addEventListener("click", ()=>pastePalletLineInto("desktop"));
+    $("btnPalletCopy").addEventListener("click", copyPalletTable);
+    $("btnPalletXlsx").addEventListener("click", exportPalletXlsx);
+    $("btnPalletClear").addEventListener("click", clearAllPallets);
+
+    ["pCodigo","pPosicion","pComentario","pQty"].forEach(id=>{
+      $(id).addEventListener("keydown", async (e)=>{
+        if(e.key==="Enter"){
+          syncPalletInputs("desktop");
+          await addPalletRecord(readPalletDesktopInputs());
+          clearPalletDesktopInputs();
+        }
+      });
+    });
+
+    $("mPalletAdd").addEventListener("click", async ()=>{
+      syncPalletInputs("mobile");
+      await addPalletRecord(readPalletMobileInputs());
+      clearPalletMobileInputs();
+    });
+    $("mPalletPaste").addEventListener("click", ()=>pastePalletLineInto("mobile"));
+    $("mPalletCopy").addEventListener("click", copyPalletTable);
+    $("mPalletXlsx").addEventListener("click", exportPalletXlsx);
+    $("mPalletClear").addEventListener("click", clearAllPallets);
+
+    ["mpCodigo","mpPosicion","mpComentario","mpQty"].forEach(id=>{
+      $(id).addEventListener("keydown", async (e)=>{
+        if(e.key==="Enter"){
+          syncPalletInputs("mobile");
+          await addPalletRecord(readPalletMobileInputs());
+          clearPalletMobileInputs();
+        }
+      });
+    });
+
+    $("palletActivo").addEventListener("input", ()=>syncPalletInputs("desktop"));
+    $("mpalletActivo").addEventListener("input", ()=>syncPalletInputs("mobile"));
+
     function enableKeyboardToggles(){
       const btns = document.querySelectorAll(".keyBtn[data-target]");
       btns.forEach(btn=>{
@@ -546,10 +983,25 @@
       });
     }
 
+    function enableTabs(){
+      const btns = document.querySelectorAll(".tab-btn");
+      const panels = document.querySelectorAll(".tab-panel");
+
+      btns.forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const target = btn.getAttribute("data-tab");
+          btns.forEach(b=>b.classList.remove("active"));
+          panels.forEach(p=>p.classList.remove("active"));
+          btn.classList.add("active");
+          document.getElementById(target).classList.add("active");
+        });
+      });
+    }
+
     buildCatalog();
     enableKeyboardToggles();
+    enableTabs();
 
-    // Listener realtime
     try{
       const q = query(collection(db, COL), orderBy("createdAt","desc"));
       onSnapshot(q, (snap)=>{
@@ -563,6 +1015,21 @@
     }catch(e){
       console.error(e);
       setStatus(false,"Error Firebase");
+    }
+
+    try{
+      const qp = query(collection(db, COL_PALLETS), orderBy("createdAt","desc"));
+      onSnapshot(qp, (snap)=>{
+        PALLET_ROWS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderAllPallet(PALLET_ROWS);
+        setPalletStatus(true,"Sincronizado");
+      }, (err)=>{
+        console.error(err);
+        setPalletStatus(false,"Sin permiso / Rules");
+      });
+    }catch(e){
+      console.error(e);
+      setPalletStatus(false,"Error Firebase");
     }
   </script>
 </body>
