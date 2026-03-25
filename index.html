@@ -275,12 +275,42 @@
         </h2>
 
         <div class="palletBar">
-          <div class="palletBox">
-            <label for="palletActivo">Pallet activo</label>
-            <input id="palletActivo" placeholder="Ej: Pallet 1" type="text" autocomplete="off" />
-          </div>
-          <div class="helper">Todo lo que registres en esta pestaña quedará asociado al pallet activo.</div>
-        </div>
+  <div class="palletBox">
+    <label for="palletActivo">Pallet activo</label>
+    <input id="palletActivo" placeholder="Ej: Pallet 1" type="text" autocomplete="off" />
+  </div>
+  <div class="helper">Todo lo que registres en esta pestaña quedará asociado al pallet activo.</div>
+</div>
+
+<div class="content" style="padding-top:0">
+  <div style="border:1px solid var(--line); background:#F5FBFA; border-radius:14px; padding:12px 14px;">
+    <div style="font-size:13px; font-weight:800; color:var(--accent2); margin-bottom:10px;">
+      Configuración de campos
+    </div>
+
+    <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+      <label style="margin:0; display:flex; gap:8px; align-items:center;">
+        <input type="checkbox" checked disabled style="width:auto;"> Código
+      </label>
+
+      <label style="margin:0; display:flex; gap:8px; align-items:center;">
+        <input type="checkbox" checked disabled style="width:auto;"> Posición
+      </label>
+
+      <label style="margin:0; display:flex; gap:8px; align-items:center;">
+        <input type="checkbox" id="cfgCaducidad" style="width:auto;"> Caducidad
+      </label>
+
+      <label style="margin:0; display:flex; gap:8px; align-items:center;">
+        <input type="checkbox" id="cfgLote" checked style="width:auto;"> Lote
+      </label>
+
+      <label style="margin:0; display:flex; gap:8px; align-items:center;">
+        <input type="checkbox" checked disabled style="width:auto;"> Cantidad
+      </label>
+    </div>
+  </div>
+</div>
 
         <div class="content desktopPanel">
           <div class="row6">
@@ -294,15 +324,15 @@
               <input id="pPosicion" list="locList" placeholder="Ej: 01-30-088-02" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
             </div>
 
-            <div>
-              <label for="pCaducidad">Caducidad</label>
-              <input id="pCaducidad" placeholder="Ej: 08-29" autocomplete="off" type="text" />
-            </div>
+            <div id="wrapPCaducidad">
+  <label for="pCaducidad">Caducidad</label>
+  <input id="pCaducidad" placeholder="Ej: 08-29" autocomplete="off" type="text" />
+</div>
 
-            <div>
-              <label for="pLote">Lote</label>
-              <input id="pLote" placeholder="Ej: AB123" autocomplete="off" type="text" inputmode="text" />
-            </div>
+<div id="wrapPLote">
+  <label for="pLote">Lote</label>
+  <input id="pLote" placeholder="Ej: AB123" autocomplete="off" type="text" inputmode="text" />
+</div>
 
             <div>
               <label for="pQty">Cantidad</label>
@@ -354,24 +384,24 @@
               </div>
             </div>
 
-            <div class="big">
-              <label for="mpCaducidad">Caducidad</label>
-              <div class="keyRow">
-                <div class="keyWrap">
-                  <input id="mpCaducidad" placeholder="Ej: 08-29" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-                </div>
-                <button class="keyBtn" type="button" data-target="mpCaducidad">ABC</button>
-              </div>
-            </div>
+            <div class="big" id="wrapMPCaducidad">
+  <label for="mpCaducidad">Caducidad</label>
+  <div class="keyRow">
+    <div class="keyWrap">
+      <input id="mpCaducidad" placeholder="Ej: 08-29" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+    </div>
+    <button class="keyBtn" type="button" data-target="mpCaducidad">ABC</button>
+  </div>
+</div>
 
-            <div class="big">
-              <label for="mpLote">Lote</label>
-              <div class="keyRow">
-                <div class="keyWrap">
-                  <input id="mpLote" placeholder="Ej: AB123" autocomplete="off" type="text" inputmode="text" />
-                </div>
-              </div>
-            </div>
+<div class="big" id="wrapMPLote">
+  <label for="mpLote">Lote</label>
+  <div class="keyRow">
+    <div class="keyWrap">
+      <input id="mpLote" placeholder="Ej: AB123" autocomplete="off" type="text" inputmode="text" />
+    </div>
+  </div>
+</div>
 
             <div class="big">
               <label for="mpQty">Cantidad</label>
@@ -411,13 +441,13 @@
               <thead>
                 <tr>
                   <th>Pallet</th>
-                  <th>Código</th>
-                  <th>Posición</th>
-                  <th>Caducidad</th>
-                  <th>Lote</th>
-                  <th class="right">Qty</th>
-                  <th>Fecha</th>
-                  <th>Acción</th>
+<th>Código</th>
+<th>Posición</th>
+<th id="thCaducidad">Caducidad</th>
+<th id="thLote">Lote</th>
+<th class="right">Qty</th>
+<th>Fecha</th>
+<th>Acción</th>
                 </tr>
               </thead>
               <tbody id="tbodyPallet"></tbody>
@@ -500,7 +530,46 @@
 
     let ROWS = [];
     let PALLET_ROWS = [];
+let palletFieldConfig = {
+  caducidad: false,
+  lote: true
+};
 
+function loadPalletFieldConfig(){
+  try{
+    const saved = localStorage.getItem("palletFieldConfig");
+    if(saved){
+      palletFieldConfig = { ...palletFieldConfig, ...JSON.parse(saved) };
+    }
+  }catch(e){}
+
+  if($("cfgCaducidad")) $("cfgCaducidad").checked = !!palletFieldConfig.caducidad;
+  if($("cfgLote")) $("cfgLote").checked = !!palletFieldConfig.lote;
+
+  applyPalletFieldConfig();
+}
+
+function savePalletFieldConfig(){
+  palletFieldConfig.caducidad = !!$("cfgCaducidad")?.checked;
+  palletFieldConfig.lote = !!$("cfgLote")?.checked;
+
+  localStorage.setItem("palletFieldConfig", JSON.stringify(palletFieldConfig));
+  applyPalletFieldConfig();
+}
+
+function applyPalletFieldConfig(){
+  if($("wrapPCaducidad")) $("wrapPCaducidad").style.display = palletFieldConfig.caducidad ? "" : "none";
+  if($("wrapPLote")) $("wrapPLote").style.display = palletFieldConfig.lote ? "" : "none";
+
+  if($("wrapMPCaducidad")) $("wrapMPCaducidad").style.display = palletFieldConfig.caducidad ? "" : "none";
+  if($("wrapMPLote")) $("wrapMPLote").style.display = palletFieldConfig.lote ? "" : "none";
+
+  if($("thCaducidad")) $("thCaducidad").style.display = palletFieldConfig.caducidad ? "" : "none";
+  if($("thLote")) $("thLote").style.display = palletFieldConfig.lote ? "" : "none";
+
+  renderAllPallet(PALLET_ROWS);
+}
+  
     function setStatus(ok, msg){
       const el = $("syncStatus");
       el.textContent = msg;
@@ -584,15 +653,15 @@
         const fecha = fmtDate(r.createdAt || r.fecha || "");
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td title="${esc(r.pallet)}">${esc(r.pallet)}</td>
-          <td title="${esc(r.codigo)}">${esc(r.codigo)}</td>
-          <td title="${esc(r.posicion)}">${esc(r.posicion)}</td>
-          <td title="${esc(r.caducidad)}">${esc(r.caducidad || "")}</td>
-          <td title="${esc(r.lote)}">${esc(r.lote || "")}</td>
-          <td class="right" title="${esc(r.qty)}">${esc(r.qty)}</td>
-          <td title="${esc(fecha)}">${esc(fecha)}</td>
-          <td><button class="btn-del" data-pallet-id="${r.id}">Eliminar</button></td>
-        `;
+  <td title="${esc(r.pallet)}">${esc(r.pallet)}</td>
+  <td title="${esc(r.codigo)}">${esc(r.codigo)}</td>
+  <td title="${esc(r.posicion)}">${esc(r.posicion)}</td>
+  ${palletFieldConfig.caducidad ? `<td title="${esc(r.caducidad)}">${esc(r.caducidad || "")}</td>` : ``}
+  ${palletFieldConfig.lote ? `<td title="${esc(r.lote)}">${esc(r.lote || "")}</td>` : ``}
+  <td class="right" title="${esc(r.qty)}">${esc(r.qty)}</td>
+  <td title="${esc(fecha)}">${esc(fecha)}</td>
+  <td><button class="btn-del" data-pallet-id="${r.id}">Eliminar</button></td>
+`;
         tb.appendChild(tr);
       }
 
@@ -612,20 +681,20 @@
         const item = document.createElement("div");
         item.className = "mItem";
         item.innerHTML = `
-          <div class="mTop">
-            <div>${esc(r.pallet)} <span style="color:var(--muted);font-weight:800">• ${esc(r.codigo)}</span></div>
-            <div style="color:var(--muted);font-size:12px;font-weight:800">${esc(fecha)}</div>
-          </div>
-          <div class="mMeta">
-            <div><b style="color:var(--ink)">Posición</b><br>${esc(r.posicion)}</div>
-            <div><b style="color:var(--ink)">Qty</b><br>${esc(r.qty)}</div>
-            <div><b style="color:var(--ink)">Caducidad</b><br>${esc(r.caducidad || "")}</div>
-            <div><b style="color:var(--ink)">Lote</b><br>${esc(r.lote || "")}</div>
-          </div>
-          <div class="mActions">
-            <button class="btn-del" data-pallet-id="${r.id}">Eliminar</button>
-          </div>
-        `;
+  <div class="mTop">
+    <div>${esc(r.pallet)} <span style="color:var(--muted);font-weight:800">• ${esc(r.codigo)}</span></div>
+    <div style="color:var(--muted);font-size:12px;font-weight:800">${esc(fecha)}</div>
+  </div>
+  <div class="mMeta">
+    <div><b style="color:var(--ink)">Posición</b><br>${esc(r.posicion)}</div>
+    <div><b style="color:var(--ink)">Qty</b><br>${esc(r.qty)}</div>
+    ${palletFieldConfig.caducidad ? `<div><b style="color:var(--ink)">Caducidad</b><br>${esc(r.caducidad || "")}</div>` : ``}
+    ${palletFieldConfig.lote ? `<div><b style="color:var(--ink)">Lote</b><br>${esc(r.lote || "")}</div>` : ``}
+  </div>
+  <div class="mActions">
+    <button class="btn-del" data-pallet-id="${r.id}">Eliminar</button>
+  </div>
+`;
         box.appendChild(item);
       }
 
@@ -717,15 +786,15 @@
     }
 
     function readPalletDesktopInputs(){
-      return {
-        pallet: $("palletActivo").value,
-        codigo: $("pCodigo").value,
-        posicion: $("pPosicion").value,
-        caducidad: $("pCaducidad").value,
-        lote: $("pLote").value,
-        qty: $("pQty").value
-      };
-    }
+  return {
+    pallet: $("palletActivo").value,
+    codigo: $("pCodigo").value,
+    posicion: $("pPosicion").value,
+    caducidad: palletFieldConfig.caducidad ? $("pCaducidad").value : "",
+    lote: palletFieldConfig.lote ? $("pLote").value : "",
+    qty: $("pQty").value
+  };
+}
     function clearPalletDesktopInputs(){
       $("pCodigo").value="";
       $("pPosicion").value="";
@@ -736,15 +805,15 @@
     }
 
     function readPalletMobileInputs(){
-      return {
-        pallet: $("mpalletActivo").value,
-        codigo: $("mpCodigo").value,
-        posicion: $("mpPosicion").value,
-        caducidad: $("mpCaducidad").value,
-        lote: $("mpLote").value,
-        qty: $("mpQty").value
-      };
-    }
+  return {
+    pallet: $("mpalletActivo").value,
+    codigo: $("mpCodigo").value,
+    posicion: $("mpPosicion").value,
+    caducidad: palletFieldConfig.caducidad ? $("mpCaducidad").value : "",
+    lote: palletFieldConfig.lote ? $("mpLote").value : "",
+    qty: $("mpQty").value
+  };
+}
     function clearPalletMobileInputs(){
       $("mpCodigo").value="";
       $("mpPosicion").value="";
@@ -788,36 +857,58 @@
     }
 
     async function pastePalletLineInto(which){
-      const raw = prompt("Pega: codigo  posicion  qty  caducidad  lote\nEj: 36152 01-30-088-02 50 08-29 AB123");
-      if(!raw) return;
+  let msg = "Pega: codigo  posicion  qty";
+  if(palletFieldConfig.caducidad) msg += "  caducidad";
+  if(palletFieldConfig.lote) msg += "  lote";
 
-      const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
-      if(parts.length < 5) return alert("Formato inválido. Ej: 36152 01-30-088-02 50 08-29 AB123");
+  const raw = prompt(msg);
+  if(!raw) return;
 
-      const codigo = parts[0];
-      const posicion = parts[1];
-      const qty = parts[2];
-      const caducidad = parts[3];
-      const lote = parts.slice(4).join(" ");
+  const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
 
-      if(which === "mobile"){
-        $("mpCodigo").value = codigo;
-        $("mpPosicion").value = posicion;
-        $("mpQty").value = qty;
-        $("mpCaducidad").value = caducidad;
-        $("mpLote").value = lote;
-        await addPalletRecord(readPalletMobileInputs());
-        clearPalletMobileInputs();
-      }else{
-        $("pCodigo").value = codigo;
-        $("pPosicion").value = posicion;
-        $("pQty").value = qty;
-        $("pCaducidad").value = caducidad;
-        $("pLote").value = lote;
-        await addPalletRecord(readPalletDesktopInputs());
-        clearPalletDesktopInputs();
-      }
-    }
+  let minParts = 3;
+  if(palletFieldConfig.caducidad) minParts++;
+  if(palletFieldConfig.lote) minParts++;
+
+  if(parts.length < minParts){
+    return alert("Formato inválido según los campos activos.");
+  }
+
+  const codigo = parts[0];
+  const posicion = parts[1];
+  const qty = parts[2];
+
+  let idx = 3;
+  let caducidad = "";
+  let lote = "";
+
+  if(palletFieldConfig.caducidad){
+    caducidad = parts[idx] || "";
+    idx++;
+  }
+
+  if(palletFieldConfig.lote){
+    lote = parts.slice(idx).join(" ");
+  }
+
+  if(which === "mobile"){
+    $("mpCodigo").value = codigo;
+    $("mpPosicion").value = posicion;
+    $("mpQty").value = qty;
+    if($("mpCaducidad")) $("mpCaducidad").value = caducidad;
+    if($("mpLote")) $("mpLote").value = lote;
+    await addPalletRecord(readPalletMobileInputs());
+    clearPalletMobileInputs();
+  }else{
+    $("pCodigo").value = codigo;
+    $("pPosicion").value = posicion;
+    $("pQty").value = qty;
+    if($("pCaducidad")) $("pCaducidad").value = caducidad;
+    if($("pLote")) $("pLote").value = lote;
+    await addPalletRecord(readPalletDesktopInputs());
+    clearPalletDesktopInputs();
+  }
+}
 
     async function copyTable(){
       if(!ROWS.length) return alert("No hay registros para copiar.");
@@ -839,10 +930,22 @@
     }
 
     async function copyPalletTable(){
-      if(!PALLET_ROWS.length) return alert("No hay registros para copiar.");
-      const header = ["pallet","codigo","posicion","caducidad","lote","qty"].join("\t");
-      const lines = PALLET_ROWS.slice().reverse().map(r => [r.pallet, r.codigo, r.posicion, r.caducidad || "", r.lote || "", r.qty].join("\t"));
-      const text = [header, ...lines].join("\n");
+  if(!PALLET_ROWS.length) return alert("No hay registros para copiar.");
+
+  const header = ["pallet","codigo","posicion"];
+  if(palletFieldConfig.caducidad) header.push("caducidad");
+  if(palletFieldConfig.lote) header.push("lote");
+  header.push("qty");
+
+  const lines = PALLET_ROWS.slice().reverse().map(r => {
+    const row = [r.pallet, r.codigo, r.posicion];
+    if(palletFieldConfig.caducidad) row.push(r.caducidad || "");
+    if(palletFieldConfig.lote) row.push(r.lote || "");
+    row.push(r.qty);
+    return row.join("\t");
+  });
+
+  const text = [header.join("\t"), ...lines].join("\n");
       try{
         await navigator.clipboard.writeText(text);
         alert("Copiado. Pega directo en Excel.");
@@ -873,16 +976,22 @@
     }
 
     function exportPalletXlsx(){
-      if(!PALLET_ROWS.length) return alert("No hay registros para exportar.");
-      const data = PALLET_ROWS.slice().reverse().map(r => ({
-        pallet: r.pallet,
-        codigo: r.codigo,
-        posicion: r.posicion,
-        caducidad: r.caducidad || "",
-        lote: r.lote || "",
-        qty: r.qty,
-        fecha: fmtDate(r.createdAt || r.fecha || "")
-      }));
+  if(!PALLET_ROWS.length) return alert("No hay registros para exportar.");
+
+  const data = PALLET_ROWS.slice().reverse().map(r => {
+    const obj = {
+      pallet: r.pallet,
+      codigo: r.codigo,
+      posicion: r.posicion
+    };
+
+    if(palletFieldConfig.caducidad) obj.caducidad = r.caducidad || "";
+    if(palletFieldConfig.lote) obj.lote = r.lote || "";
+
+    obj.qty = r.qty;
+    obj.fecha = fmtDate(r.createdAt || r.fecha || "");
+    return obj;
+  });
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Pallets");
@@ -1007,7 +1116,9 @@
 
     $("palletActivo").addEventListener("input", ()=>syncPalletInputs("desktop"));
     $("mpalletActivo").addEventListener("input", ()=>syncPalletInputs("mobile"));
-
+if($("cfgCaducidad")) $("cfgCaducidad").addEventListener("change", savePalletFieldConfig);
+if($("cfgLote")) $("cfgLote").addEventListener("change", savePalletFieldConfig);
+  
     function enableKeyboardToggles(){
       const btns = document.querySelectorAll(".keyBtn[data-target]");
       btns.forEach(btn=>{
@@ -1050,6 +1161,7 @@
     }
 
     buildCatalog();
+  loadPalletFieldConfig();
     enableKeyboardToggles();
     enableTabs();
 
