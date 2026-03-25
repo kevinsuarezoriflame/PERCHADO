@@ -265,198 +265,69 @@
         </section>
       </div>
 
-      <div class="tab-panel" id="tab-pallets">
-        <h2>
-          Panel | Registro por pallet
-          <span>
-            <span class="tag" id="countPalletTag">0 registros</span>
-            <span class="status" id="syncPalletStatus">Sincronizando…</span>
-          </span>
-        </h2>
+      
+<div class="tab-panel" id="tab-pallets">
+  <h2>
+    Panel | Registro por pallet
+    <span>
+      <span class="tag" id="countPalletTag">0 registros</span>
+      <span class="status" id="syncPalletStatus">Sincronizando…</span>
+    </span>
+  </h2>
 
-        <div class="palletBar">
-  <div class="palletBox">
-    <label for="palletActivo">Pallet activo</label>
-    <input id="palletActivo" placeholder="Ej: Pallet 1" type="text" autocomplete="off" />
-  </div>
-  <div class="helper">Todo lo que registres en esta pestaña quedará asociado al pallet activo.</div>
-</div>
-
-<div class="content" style="padding-top:0">
-  <div style="border:1px solid var(--line); background:#F5FBFA; border-radius:14px; padding:12px 14px;">
-    <div style="font-size:13px; font-weight:800; color:var(--accent2); margin-bottom:10px;">
-      Configuración de campos
+  <div class="palletBar" id="wrapPalletActivoBox">
+    <div class="palletBox">
+      <label for="palletActivo">Pallet activo</label>
+      <input id="palletActivo" placeholder="Ej: Pallet 1" type="text" autocomplete="off" />
     </div>
-
-    <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
-      <label style="margin:0; display:flex; gap:8px; align-items:center;">
-        <input type="checkbox" checked disabled style="width:auto;"> Código
-      </label>
-
-      <label style="margin:0; display:flex; gap:8px; align-items:center;">
-        <input type="checkbox" checked disabled style="width:auto;"> Posición
-      </label>
-
-      <label style="margin:0; display:flex; gap:8px; align-items:center;">
-        <input type="checkbox" id="cfgCaducidad" style="width:auto;"> Caducidad
-      </label>
-
-      <label style="margin:0; display:flex; gap:8px; align-items:center;">
-        <input type="checkbox" id="cfgLote" checked style="width:auto;"> Lote
-      </label>
-
-      <label style="margin:0; display:flex; gap:8px; align-items:center;">
-        <input type="checkbox" checked disabled style="width:auto;"> Cantidad
-      </label>
-    </div>
+    <div class="helper">Todo lo que registres en esta pestaña quedará asociado al pallet activo.</div>
   </div>
-</div>
 
-        <div class="content desktopPanel">
-          <div class="row6">
-            <div>
-              <label for="pCodigo">Código</label>
-              <input id="pCodigo" placeholder="Ej: 36152" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-            </div>
-
-            <div>
-              <label for="pPosicion">Posición</label>
-              <input id="pPosicion" list="locList" placeholder="Ej: 01-30-088-02" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-            </div>
-
-            <div id="wrapPCaducidad">
-  <label for="pCaducidad">Caducidad</label>
-  <input id="pCaducidad" placeholder="Ej: 08-29" autocomplete="off" type="text" />
-</div>
-
-<div id="wrapPLote">
-  <label for="pLote">Lote</label>
-  <input id="pLote" placeholder="Ej: AB123" autocomplete="off" type="text" inputmode="text" />
-</div>
-
-            <div>
-              <label for="pQty">Cantidad</label>
-              <input id="pQty" placeholder="Ej: 50" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-            </div>
-
-            <div>
-              <label>&nbsp;</label>
-              <button class="btn-primary" id="btnPalletAdd" style="width:100%">+ Agregar</button>
-            </div>
-          </div>
-
-          <div class="btnbar">
-            <button class="btn-secondary" id="btnPalletPaste">Pegar línea</button>
-            <button class="btn-secondary" id="btnPalletCopy">Copiar tabla</button>
-            <button class="btn-secondary" id="btnPalletXlsx">Descargar Excel</button>
-            <button class="btn-danger" id="btnPalletClear">Limpiar todo</button>
-          </div>
-        </div>
-
-        <div class="content operator">
-          <div class="grid">
-            <div class="big">
-              <label for="mpalletActivo">Pallet activo</label>
-              <div class="keyRow">
-                <div class="keyWrap">
-                  <input id="mpalletActivo" placeholder="Ej: Pallet 1" autocomplete="off" type="text" inputmode="text" />
-                </div>
-              </div>
-            </div>
-
-            <div class="big">
-              <label for="mpCodigo">Código</label>
-              <div class="keyRow">
-                <div class="keyWrap">
-                  <input id="mpCodigo" placeholder="Código" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-                </div>
-                <button class="keyBtn" type="button" data-target="mpCodigo">ABC</button>
-              </div>
-            </div>
-
-            <div class="big">
-              <label for="mpPosicion">Posición</label>
-              <div class="keyRow">
-                <div class="keyWrap">
-                  <input id="mpPosicion" list="locList" placeholder="Buscar ubicación…" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-                </div>
-                <button class="keyBtn" type="button" data-target="mpPosicion">ABC</button>
-              </div>
-            </div>
-
-            <div class="big" id="wrapMPCaducidad">
-  <label for="mpCaducidad">Caducidad</label>
-  <div class="keyRow">
-    <div class="keyWrap">
-      <input id="mpCaducidad" placeholder="Ej: 08-29" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-    </div>
-    <button class="keyBtn" type="button" data-target="mpCaducidad">ABC</button>
-  </div>
-</div>
-
-<div class="big" id="wrapMPLote">
-  <label for="mpLote">Lote</label>
-  <div class="keyRow">
-    <div class="keyWrap">
-      <input id="mpLote" placeholder="Ej: AB123" autocomplete="off" type="text" inputmode="text" />
-    </div>
-  </div>
-</div>
-
-            <div class="big">
-              <label for="mpQty">Cantidad</label>
-              <div class="keyRow">
-                <div class="keyWrap">
-                  <input id="mpQty" placeholder="Cantidad" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
-                </div>
-                <button class="keyBtn" type="button" data-target="mpQty">ABC</button>
-              </div>
-            </div>
-
-            <div class="btnbar">
-              <button class="btn-primary span2" id="mPalletAdd">+ Agregar</button>
-              <button class="btn-secondary" id="mPalletPaste">Pegar</button>
-              <button class="btn-secondary" id="mPalletCopy">Copiar</button>
-              <button class="btn-secondary" id="mPalletXlsx">Excel</button>
-              <button class="btn-danger span2" id="mPalletClear">Limpiar todo</button>
-            </div>
-          </div>
-        </div>
-
-        <section class="card" style="margin:0 16px 16px;border-radius:16px;box-shadow:none">
-          <h2>Tabla | Registros por pallet</h2>
-
-          <div class="twrap">
-            <table>
-              <colgroup>
-                <col style="width:130px">
-                <col style="width:130px">
-                <col style="width:22%">
-                <col style="width:16%">
-                <col style="width:16%">
-                <col style="width:100px">
-                <col style="width:170px">
-                <col style="width:120px">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>Pallet</th>
-<th>Código</th>
-<th>Posición</th>
-<th id="thCaducidad">Caducidad</th>
-<th id="thLote">Lote</th>
-<th class="right">Qty</th>
-<th>Fecha</th>
-<th>Acción</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyPallet"></tbody>
-            </table>
-          </div>
-
-          <div class="mobileList" id="mobilePalletList"></div>
-        </section>
+  <div class="content" style="padding-top:0">
+    <div style="border:1px solid var(--line); background:#F5FBFA; border-radius:14px; padding:12px 14px;">
+      <div style="font-size:13px; font-weight:800; color:var(--accent2); margin-bottom:10px;">
+        Configuración de campos
       </div>
+
+      <div id="fieldConfigBox" style="display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:10px;"></div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input id="newFieldName" type="text" placeholder="Nuevo campo. Ej: Observación" style="max-width:260px;" />
+        <button type="button" class="btn-secondary" id="btnAddCustomField">+ Agregar campo</button>
+      </div>
+
+      <div id="customFieldsList" style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px;"></div>
+    </div>
+  </div>
+
+  <div class="content" id="palletEntryPanel">
+    <div id="palletDynamicForm" class="row6"></div>
+
+    <div class="btnbar">
+      <button class="btn-primary" id="btnPalletAdd">+ Agregar</button>
+      <button class="btn-secondary" id="btnPalletPaste">Pegar línea</button>
+      <button class="btn-secondary" id="btnPalletCopy">Copiar tabla</button>
+      <button class="btn-secondary" id="btnPalletXlsx">Descargar Excel</button>
+      <button class="btn-danger" id="btnPalletClear">Limpiar todo</button>
+    </div>
+  </div>
+
+  <section class="card" style="margin:0 16px 16px;border-radius:16px;box-shadow:none">
+    <h2>Tabla | Registros por pallet</h2>
+
+    <div class="twrap">
+      <table>
+        <thead>
+          <tr id="palletTableHeadRow"></tr>
+        </thead>
+        <tbody id="tbodyPallet"></tbody>
+      </table>
+    </div>
+
+    <div class="mobileList" id="mobilePalletList"></div>
+  </section>
+</div>
+</div>
     </section>
   </main>
 
@@ -528,48 +399,244 @@
       dl.appendChild(frag);
     }
 
+    
     let ROWS = [];
     let PALLET_ROWS = [];
-let palletFieldConfig = {
-  caducidad: false,
-  lote: true
-};
 
-function loadPalletFieldConfig(){
-  try{
-    const saved = localStorage.getItem("palletFieldConfig");
-    if(saved){
-      palletFieldConfig = { ...palletFieldConfig, ...JSON.parse(saved) };
+    let palletFieldConfig = [
+      { key:"pallet", label:"Pallet", active:true, fixed:false, builtIn:true },
+      { key:"codigo", label:"Código", active:true, fixed:true, builtIn:true },
+      { key:"posicion", label:"Posición", active:true, fixed:false, builtIn:true },
+      { key:"caducidad", label:"Caducidad", active:true, fixed:false, builtIn:true },
+      { key:"lote", label:"Lote", active:true, fixed:false, builtIn:true },
+      { key:"qty", label:"Cantidad", active:true, fixed:true, builtIn:true }
+    ];
+
+    function savePalletFieldConfig(){
+      localStorage.setItem("palletFieldConfig_v2", JSON.stringify(palletFieldConfig));
     }
-  }catch(e){}
 
-  if($("cfgCaducidad")) $("cfgCaducidad").checked = !!palletFieldConfig.caducidad;
-  if($("cfgLote")) $("cfgLote").checked = !!palletFieldConfig.lote;
+    function getActivePalletFields(){
+      return palletFieldConfig.filter(f => f.active);
+    }
 
-  applyPalletFieldConfig();
-}
+    function getVisibleEntryFields(){
+      return palletFieldConfig.filter(f => f.active && f.key !== "pallet");
+    }
 
-function savePalletFieldConfig(){
-  palletFieldConfig.caducidad = !!$("cfgCaducidad")?.checked;
-  palletFieldConfig.lote = !!$("cfgLote")?.checked;
+    function togglePalletActivoBox(){
+      const palletField = palletFieldConfig.find(f => f.key === "pallet");
+      if($("wrapPalletActivoBox")){
+        $("wrapPalletActivoBox").style.display = palletField && palletField.active ? "" : "none";
+      }
+    }
 
-  localStorage.setItem("palletFieldConfig", JSON.stringify(palletFieldConfig));
-  applyPalletFieldConfig();
-}
+    function renderFieldConfigUI(){
+      const box = $("fieldConfigBox");
+      const customList = $("customFieldsList");
+      if(!box || !customList) return;
 
-function applyPalletFieldConfig(){
-  if($("wrapPCaducidad")) $("wrapPCaducidad").style.display = palletFieldConfig.caducidad ? "" : "none";
-  if($("wrapPLote")) $("wrapPLote").style.display = palletFieldConfig.lote ? "" : "none";
+      box.innerHTML = "";
+      customList.innerHTML = "";
 
-  if($("wrapMPCaducidad")) $("wrapMPCaducidad").style.display = palletFieldConfig.caducidad ? "" : "none";
-  if($("wrapMPLote")) $("wrapMPLote").style.display = palletFieldConfig.lote ? "" : "none";
+      palletFieldConfig.forEach(field => {
+        const label = document.createElement("label");
+        label.style.margin = "0";
+        label.style.display = "flex";
+        label.style.gap = "8px";
+        label.style.alignItems = "center";
 
-  if($("thCaducidad")) $("thCaducidad").style.display = palletFieldConfig.caducidad ? "" : "none";
-  if($("thLote")) $("thLote").style.display = palletFieldConfig.lote ? "" : "none";
+        const chk = document.createElement("input");
+        chk.type = "checkbox";
+        chk.checked = !!field.active;
+        chk.disabled = !!field.fixed;
+        chk.style.width = "auto";
+        chk.addEventListener("change", () => {
+          field.active = chk.checked;
+          savePalletFieldConfig();
+          renderDynamicPalletForm();
+          renderPalletTableHead();
+          togglePalletActivoBox();
+          renderAllPallet(PALLET_ROWS);
+        });
 
-  renderAllPallet(PALLET_ROWS);
-}
-  
+        label.appendChild(chk);
+        label.appendChild(document.createTextNode(field.label));
+        box.appendChild(label);
+
+        if(!field.builtIn){
+          const tag = document.createElement("div");
+          tag.style.display = "inline-flex";
+          tag.style.alignItems = "center";
+          tag.style.gap = "8px";
+          tag.style.padding = "6px 10px";
+          tag.style.border = "1px solid var(--line)";
+          tag.style.borderRadius = "999px";
+          tag.style.background = "#fff";
+
+          const txt = document.createElement("span");
+          txt.textContent = field.label;
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = "✕";
+          btn.style.border = "none";
+          btn.style.background = "transparent";
+          btn.style.cursor = "pointer";
+          btn.style.fontWeight = "800";
+          btn.style.color = "#b42318";
+          btn.addEventListener("click", () => {
+            palletFieldConfig = palletFieldConfig.filter(f => f.key !== field.key);
+            savePalletFieldConfig();
+            renderFieldConfigUI();
+            renderDynamicPalletForm();
+            renderPalletTableHead();
+            renderAllPallet(PALLET_ROWS);
+          });
+
+          tag.appendChild(txt);
+          tag.appendChild(btn);
+          customList.appendChild(tag);
+        }
+      });
+    }
+
+    function renderDynamicPalletForm(){
+      const form = $("palletDynamicForm");
+      if(!form) return;
+
+      form.innerHTML = "";
+
+      const entryFields = getVisibleEntryFields();
+
+      entryFields.forEach(field => {
+        const wrap = document.createElement("div");
+
+        const label = document.createElement("label");
+        label.setAttribute("for", "dyn_" + field.key);
+        label.textContent = field.label;
+
+        const input = document.createElement("input");
+        input.id = "dyn_" + field.key;
+        input.type = "text";
+        input.autocomplete = "off";
+
+        if(field.key === "codigo") input.placeholder = "Ej: 36152";
+        else if(field.key === "posicion") input.placeholder = "Ej: 01-30-088-02";
+        else if(field.key === "qty") input.placeholder = "Ej: 50";
+        else input.placeholder = "Ej: " + field.label;
+
+        if(field.key === "posicion") input.setAttribute("list", "locList");
+        if(field.key === "codigo" || field.key === "qty" || field.key === "posicion"){
+          input.setAttribute("inputmode", "numeric");
+        }
+
+        input.addEventListener("keydown", async (e) => {
+          if(e.key === "Enter"){
+            await addPalletRecord(readDynamicPalletInputs());
+            clearDynamicPalletInputs();
+          }
+        });
+
+        wrap.appendChild(label);
+        wrap.appendChild(input);
+        form.appendChild(wrap);
+      });
+    }
+
+    function renderPalletTableHead(){
+      const row = $("palletTableHeadRow");
+      if(!row) return;
+
+      row.innerHTML = "";
+
+      getActivePalletFields().forEach(field => {
+        const th = document.createElement("th");
+        th.textContent = field.label;
+        if(field.key === "qty") th.className = "right";
+        row.appendChild(th);
+      });
+
+      const thFecha = document.createElement("th");
+      thFecha.textContent = "Fecha";
+      row.appendChild(thFecha);
+
+      const thAccion = document.createElement("th");
+      thAccion.textContent = "Acción";
+      row.appendChild(thAccion);
+    }
+
+    function readDynamicPalletInputs(){
+      const obj = {};
+      getVisibleEntryFields().forEach(field => {
+        const el = $("dyn_" + field.key);
+        obj[field.key] = el ? el.value.trim() : "";
+      });
+
+      const palletField = palletFieldConfig.find(f => f.key === "pallet");
+      obj.pallet = palletField && palletField.active ? ($("palletActivo")?.value || "").trim() : "";
+
+      return obj;
+    }
+
+    function clearDynamicPalletInputs(){
+      getVisibleEntryFields().forEach(field => {
+        const el = $("dyn_" + field.key);
+        if(el) el.value = "";
+      });
+      const first = getVisibleEntryFields()[0];
+      if(first && $("dyn_" + first.key)) $("dyn_" + first.key).focus();
+    }
+
+    function addCustomPalletField(){
+      const inp = $("newFieldName");
+      if(!inp) return;
+
+      const name = inp.value.trim();
+      if(!name) return alert("Escribe el nombre del nuevo campo.");
+
+      const key = name
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+
+      if(!key) return alert("Nombre inválido.");
+      if(palletFieldConfig.some(f => f.key === key)) return alert("Ese campo ya existe.");
+
+      palletFieldConfig.push({
+        key,
+        label: name,
+        active: true,
+        fixed: false,
+        builtIn: false
+      });
+
+      inp.value = "";
+      savePalletFieldConfig();
+      renderFieldConfigUI();
+      renderDynamicPalletForm();
+      renderPalletTableHead();
+      renderAllPallet(PALLET_ROWS);
+    }
+
+    function loadPalletFieldConfig(){
+      try{
+        const saved = localStorage.getItem("palletFieldConfig_v2");
+        if(saved){
+          const parsed = JSON.parse(saved);
+          if(Array.isArray(parsed) && parsed.length){
+            palletFieldConfig = parsed;
+          }
+        }
+      }catch(e){}
+      renderFieldConfigUI();
+      renderDynamicPalletForm();
+      renderPalletTableHead();
+      togglePalletActivoBox();
+      renderAllPallet(PALLET_ROWS);
+    }
+
     function setStatus(ok, msg){
       const el = $("syncStatus");
       el.textContent = msg;
@@ -649,19 +716,19 @@ function applyPalletFieldConfig(){
     function renderPalletDesktop(rows){
       const tb = $("tbodyPallet");
       tb.innerHTML = "";
+      const activeFields = getActivePalletFields();
+
       for(const r of rows){
         const fecha = fmtDate(r.createdAt || r.fecha || "");
         const tr = document.createElement("tr");
-        tr.innerHTML = `
-  <td title="${esc(r.pallet)}">${esc(r.pallet)}</td>
-  <td title="${esc(r.codigo)}">${esc(r.codigo)}</td>
-  <td title="${esc(r.posicion)}">${esc(r.posicion)}</td>
-  ${palletFieldConfig.caducidad ? `<td title="${esc(r.caducidad)}">${esc(r.caducidad || "")}</td>` : ``}
-  ${palletFieldConfig.lote ? `<td title="${esc(r.lote)}">${esc(r.lote || "")}</td>` : ``}
-  <td class="right" title="${esc(r.qty)}">${esc(r.qty)}</td>
-  <td title="${esc(fecha)}">${esc(fecha)}</td>
-  <td><button class="btn-del" data-pallet-id="${r.id}">Eliminar</button></td>
-`;
+        tr.innerHTML = activeFields.map(field => {
+          const val = r[field.key] ?? "";
+          const cls = field.key === "qty" ? ' class="right"' : "";
+          return `<td${cls} title="${esc(val)}">${esc(val)}</td>`;
+        }).join("") + `
+          <td title="${esc(fecha)}">${esc(fecha)}</td>
+          <td><button class="btn-del" data-pallet-id="${r.id}">Eliminar</button></td>
+        `;
         tb.appendChild(tr);
       }
 
@@ -676,25 +743,27 @@ function applyPalletFieldConfig(){
     function renderPalletMobile(rows){
       const box = $("mobilePalletList");
       box.innerHTML = "";
+      const activeFields = getActivePalletFields();
+
       for(const r of rows){
         const fecha = fmtDate(r.createdAt || r.fecha || "");
         const item = document.createElement("div");
         item.className = "mItem";
+        const meta = activeFields
+          .filter(f => f.key !== "pallet")
+          .map(f => `<div><b style="color:var(--ink)">${esc(f.label)}</b><br>${esc(r[f.key] ?? "")}</div>`)
+          .join("");
+
         item.innerHTML = `
-  <div class="mTop">
-    <div>${esc(r.pallet)} <span style="color:var(--muted);font-weight:800">• ${esc(r.codigo)}</span></div>
-    <div style="color:var(--muted);font-size:12px;font-weight:800">${esc(fecha)}</div>
-  </div>
-  <div class="mMeta">
-    <div><b style="color:var(--ink)">Posición</b><br>${esc(r.posicion)}</div>
-    <div><b style="color:var(--ink)">Qty</b><br>${esc(r.qty)}</div>
-    ${palletFieldConfig.caducidad ? `<div><b style="color:var(--ink)">Caducidad</b><br>${esc(r.caducidad || "")}</div>` : ``}
-    ${palletFieldConfig.lote ? `<div><b style="color:var(--ink)">Lote</b><br>${esc(r.lote || "")}</div>` : ``}
-  </div>
-  <div class="mActions">
-    <button class="btn-del" data-pallet-id="${r.id}">Eliminar</button>
-  </div>
-`;
+          <div class="mTop">
+            <div>${esc(r.pallet || "")} <span style="color:var(--muted);font-weight:800">• ${esc(r.codigo || "")}</span></div>
+            <div style="color:var(--muted);font-size:12px;font-weight:800">${esc(fecha)}</div>
+          </div>
+          <div class="mMeta">${meta}</div>
+          <div class="mActions">
+            <button class="btn-del" data-pallet-id="${r.id}">Eliminar</button>
+          </div>
+        `;
         box.appendChild(item);
       }
 
@@ -744,29 +813,38 @@ function applyPalletFieldConfig(){
       });
     }
 
-    async function addPalletRecord({pallet, codigo, posicion, caducidad, lote, qty}){
-      const p = String(pallet ?? "").trim();
-      const c = String(codigo ?? "").trim();
-      const pos = String(posicion ?? "").trim();
-      const cad = String(caducidad ?? "").trim();
-      const lot = String(lote ?? "").trim();
+    async function addPalletRecord(data){
+      const palletField = palletFieldConfig.find(f => f.key === "pallet");
+      const activeFields = getActivePalletFields();
 
-      if(!p) return alert("Falta el Pallet activo.");
-      if(!c) return alert("Falta el Código.");
-      if(!pos) return alert("Falta la Posición.");
+      if(palletField && palletField.active && !String(data.pallet || "").trim()){
+        return alert("Falta el Pallet activo.");
+      }
 
-      const vq = validateQty(qty);
-      if(!vq.ok) return alert(vq.msg);
+      const requiredKeys = getVisibleEntryFields()
+        .filter(f => ["codigo","qty"].includes(f.key))
+        .map(f => f.key);
 
-      await addDoc(collection(db, COL_PALLETS), {
-        pallet: p,
-        codigo: c,
-        posicion: pos,
-        caducidad: cad,
-        lote: lot,
-        qty: vq.value,
-        createdAt: serverTimestamp()
+      const missing = requiredKeys.filter(k => !String(data[k] || "").trim());
+      if(missing.length){
+        return alert("Completa los campos obligatorios: " + missing.join(", "));
+      }
+
+      if(String(data.qty ?? "").trim()){
+        const vq = validateQty(data.qty);
+        if(!vq.ok) return alert(vq.msg);
+        data.qty = vq.value;
+      }
+
+      const docData = {};
+      activeFields.forEach(field => {
+        docData[field.key] = String(data[field.key] ?? "").trim();
       });
+      if("qty" in data) docData.qty = data.qty;
+
+      docData.createdAt = serverTimestamp();
+
+      await addDoc(collection(db, COL_PALLETS), docData);
     }
 
     function readDesktopInputs(){
@@ -783,52 +861,6 @@ function applyPalletFieldConfig(){
     function clearMobileInputs(){
       $("mCodigo").value=""; $("mFrom").value=""; $("mTo").value=""; $("mQty").value="";
       $("mCodigo").focus();
-    }
-
-    function readPalletDesktopInputs(){
-  return {
-    pallet: $("palletActivo").value,
-    codigo: $("pCodigo").value,
-    posicion: $("pPosicion").value,
-    caducidad: palletFieldConfig.caducidad ? $("pCaducidad").value : "",
-    lote: palletFieldConfig.lote ? $("pLote").value : "",
-    qty: $("pQty").value
-  };
-}
-    function clearPalletDesktopInputs(){
-      $("pCodigo").value="";
-      $("pPosicion").value="";
-      $("pCaducidad").value="";
-      $("pLote").value="";
-      $("pQty").value="";
-      $("pCodigo").focus();
-    }
-
-    function readPalletMobileInputs(){
-  return {
-    pallet: $("mpalletActivo").value,
-    codigo: $("mpCodigo").value,
-    posicion: $("mpPosicion").value,
-    caducidad: palletFieldConfig.caducidad ? $("mpCaducidad").value : "",
-    lote: palletFieldConfig.lote ? $("mpLote").value : "",
-    qty: $("mpQty").value
-  };
-}
-    function clearPalletMobileInputs(){
-      $("mpCodigo").value="";
-      $("mpPosicion").value="";
-      $("mpCaducidad").value="";
-      $("mpLote").value="";
-      $("mpQty").value="";
-      $("mpCodigo").focus();
-    }
-
-    function syncPalletInputs(source){
-      if(source === "desktop"){
-        $("mpalletActivo").value = $("palletActivo").value;
-      }else{
-        $("palletActivo").value = $("mpalletActivo").value;
-      }
     }
 
     async function pasteLineInto(which){
@@ -856,59 +888,25 @@ function applyPalletFieldConfig(){
       }
     }
 
-    async function pastePalletLineInto(which){
-  let msg = "Pega: codigo  posicion  qty";
-  if(palletFieldConfig.caducidad) msg += "  caducidad";
-  if(palletFieldConfig.lote) msg += "  lote";
+    async function pastePalletLineInto(){
+      const activeEntryFields = getVisibleEntryFields();
+      const msg = "Pega en este orden: " + activeEntryFields.map(f => f.label).join("  ");
+      const raw = prompt(msg);
+      if(!raw) return;
 
-  const raw = prompt(msg);
-  if(!raw) return;
+      const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
+      if(parts.length < activeEntryFields.length){
+        return alert("Formato inválido según los campos activos.");
+      }
 
-  const parts = raw.trim().split(/\s+|\t+|\s*,\s*/).filter(Boolean);
+      activeEntryFields.forEach((field, i) => {
+        const el = $("dyn_" + field.key);
+        if(el) el.value = parts[i] || "";
+      });
 
-  let minParts = 3;
-  if(palletFieldConfig.caducidad) minParts++;
-  if(palletFieldConfig.lote) minParts++;
-
-  if(parts.length < minParts){
-    return alert("Formato inválido según los campos activos.");
-  }
-
-  const codigo = parts[0];
-  const posicion = parts[1];
-  const qty = parts[2];
-
-  let idx = 3;
-  let caducidad = "";
-  let lote = "";
-
-  if(palletFieldConfig.caducidad){
-    caducidad = parts[idx] || "";
-    idx++;
-  }
-
-  if(palletFieldConfig.lote){
-    lote = parts.slice(idx).join(" ");
-  }
-
-  if(which === "mobile"){
-    $("mpCodigo").value = codigo;
-    $("mpPosicion").value = posicion;
-    $("mpQty").value = qty;
-    if($("mpCaducidad")) $("mpCaducidad").value = caducidad;
-    if($("mpLote")) $("mpLote").value = lote;
-    await addPalletRecord(readPalletMobileInputs());
-    clearPalletMobileInputs();
-  }else{
-    $("pCodigo").value = codigo;
-    $("pPosicion").value = posicion;
-    $("pQty").value = qty;
-    if($("pCaducidad")) $("pCaducidad").value = caducidad;
-    if($("pLote")) $("pLote").value = lote;
-    await addPalletRecord(readPalletDesktopInputs());
-    clearPalletDesktopInputs();
-  }
-}
+      await addPalletRecord(readDynamicPalletInputs());
+      clearDynamicPalletInputs();
+    }
 
     async function copyTable(){
       if(!ROWS.length) return alert("No hay registros para copiar.");
@@ -930,22 +928,16 @@ function applyPalletFieldConfig(){
     }
 
     async function copyPalletTable(){
-  if(!PALLET_ROWS.length) return alert("No hay registros para copiar.");
+      if(!PALLET_ROWS.length) return alert("No hay registros para copiar.");
 
-  const header = ["pallet","codigo","posicion"];
-  if(palletFieldConfig.caducidad) header.push("caducidad");
-  if(palletFieldConfig.lote) header.push("lote");
-  header.push("qty");
+      const activeFields = getActivePalletFields();
+      const header = activeFields.map(f => f.label.toLowerCase());
 
-  const lines = PALLET_ROWS.slice().reverse().map(r => {
-    const row = [r.pallet, r.codigo, r.posicion];
-    if(palletFieldConfig.caducidad) row.push(r.caducidad || "");
-    if(palletFieldConfig.lote) row.push(r.lote || "");
-    row.push(r.qty);
-    return row.join("\t");
-  });
+      const lines = PALLET_ROWS.slice().reverse().map(r => {
+        return activeFields.map(f => r[f.key] ?? "").join("\t");
+      });
 
-  const text = [header.join("\t"), ...lines].join("\n");
+      const text = [header.join("\t"), ...lines].join("\n");
       try{
         await navigator.clipboard.writeText(text);
         alert("Copiado. Pega directo en Excel.");
@@ -976,29 +968,23 @@ function applyPalletFieldConfig(){
     }
 
     function exportPalletXlsx(){
-  if(!PALLET_ROWS.length) return alert("No hay registros para exportar.");
+      if(!PALLET_ROWS.length) return alert("No hay registros para exportar.");
 
-  const data = PALLET_ROWS.slice().reverse().map(r => {
-    const obj = {
-      pallet: r.pallet,
-      codigo: r.codigo,
-      posicion: r.posicion
-    };
+      const activeFields = getActivePalletFields();
+      const data = PALLET_ROWS.slice().reverse().map(r => {
+        const obj = {};
+        activeFields.forEach(f => obj[f.label] = r[f.key] ?? "");
+        obj["Fecha"] = fmtDate(r.createdAt || r.fecha || "");
+        return obj;
+      });
 
-    if(palletFieldConfig.caducidad) obj.caducidad = r.caducidad || "";
-    if(palletFieldConfig.lote) obj.lote = r.lote || "";
-
-    obj.qty = r.qty;
-    obj.fecha = fmtDate(r.createdAt || r.fecha || "");
-    return obj;
-  });
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Pallets");
       XLSX.writeFile(wb, `Perchar_Pallets_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
 
-    async function clearAll(){
+async function clearAll(){
       const ok = confirm("¿Borrar TODO lo guardado en la nube (Firebase)?");
       if(!ok) return;
       const snap = await getDocs(collection(db, COL));
@@ -1074,51 +1060,32 @@ function applyPalletFieldConfig(){
       });
     });
 
+    
     $("btnPalletAdd").addEventListener("click", async ()=>{
-      syncPalletInputs("desktop");
-      await addPalletRecord(readPalletDesktopInputs());
-      clearPalletDesktopInputs();
+      await addPalletRecord(readDynamicPalletInputs());
+      clearDynamicPalletInputs();
     });
-    $("btnPalletPaste").addEventListener("click", ()=>pastePalletLineInto("desktop"));
+    $("btnPalletPaste").addEventListener("click", pastePalletLineInto);
     $("btnPalletCopy").addEventListener("click", copyPalletTable);
     $("btnPalletXlsx").addEventListener("click", exportPalletXlsx);
     $("btnPalletClear").addEventListener("click", clearAllPallets);
 
-    ["pCodigo","pPosicion","pCaducidad","pLote","pQty"].forEach(id=>{
-      $(id).addEventListener("keydown", async (e)=>{
-        if(e.key==="Enter"){
-          syncPalletInputs("desktop");
-          await addPalletRecord(readPalletDesktopInputs());
-          clearPalletDesktopInputs();
-        }
+    $("palletActivo").addEventListener("keydown", async (e)=>{
+      if(e.key === "Enter"){
+        const first = getVisibleEntryFields()[0];
+        if(first && $("dyn_" + first.key)) $("dyn_" + first.key).focus();
+      }
+    });
+
+    if($("btnAddCustomField")){
+      $("btnAddCustomField").addEventListener("click", addCustomPalletField);
+    }
+    if($("newFieldName")){
+      $("newFieldName").addEventListener("keydown", (e)=>{
+        if(e.key === "Enter") addCustomPalletField();
       });
-    });
+    }
 
-    $("mPalletAdd").addEventListener("click", async ()=>{
-      syncPalletInputs("mobile");
-      await addPalletRecord(readPalletMobileInputs());
-      clearPalletMobileInputs();
-    });
-    $("mPalletPaste").addEventListener("click", ()=>pastePalletLineInto("mobile"));
-    $("mPalletCopy").addEventListener("click", copyPalletTable);
-    $("mPalletXlsx").addEventListener("click", exportPalletXlsx);
-    $("mPalletClear").addEventListener("click", clearAllPallets);
-
-    ["mpCodigo","mpPosicion","mpCaducidad","mpLote","mpQty"].forEach(id=>{
-      $(id).addEventListener("keydown", async (e)=>{
-        if(e.key==="Enter"){
-          syncPalletInputs("mobile");
-          await addPalletRecord(readPalletMobileInputs());
-          clearPalletMobileInputs();
-        }
-      });
-    });
-
-    $("palletActivo").addEventListener("input", ()=>syncPalletInputs("desktop"));
-    $("mpalletActivo").addEventListener("input", ()=>syncPalletInputs("mobile"));
-if($("cfgCaducidad")) $("cfgCaducidad").addEventListener("change", savePalletFieldConfig);
-if($("cfgLote")) $("cfgLote").addEventListener("change", savePalletFieldConfig);
-  
     function enableKeyboardToggles(){
       const btns = document.querySelectorAll(".keyBtn[data-target]");
       btns.forEach(btn=>{
