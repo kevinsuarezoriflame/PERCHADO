@@ -375,13 +375,24 @@
       }
     }
 
+    function normalizeLocation(value){
+      const s = String(value ?? "").trim();
+      if(!s) return "";
+      const m = s.match(/^(\d{2})-(\d{2})-(\d{1,3})-(\d{2})$/);
+      if(m){
+        return `${m[1]}-${m[2]}-${String(m[3]).padStart(3,"0")}-${m[4]}`;
+      }
+      return s;
+    }
+
+
     function buildCatalog(){
       const dl = $("locList");
       dl.innerHTML = "";
       const frag = document.createDocumentFragment();
 
       for(let i=1;i<=90;i++){
-        const mid = pad(i);
+        const mid = String(i).padStart(3,"0");
         for(let j=1;j<=7;j++){
           const opt = document.createElement("option");
           opt.value = `01-30-${mid}-${pad(j)}`;
@@ -795,8 +806,8 @@
 
     async function addMovement({codigo, from, to, qty}){
       const c = String(codigo ?? "").trim();
-      const f = String(from ?? "").trim();
-      const t = String(to ?? "").trim();
+      const f = normalizeLocation(from);
+      const t = normalizeLocation(to);
       if(!c) return alert("Falta el Código.");
       if(!f) return alert("Falta From.");
       if(!t) return alert("Falta To.");
@@ -848,7 +859,12 @@
     }
 
     function readDesktopInputs(){
-      return { codigo: $("codigo").value, from: $("posFrom").value, to: $("posTo").value, qty: $("qty").value };
+      return {
+        codigo: $("codigo").value,
+        from: normalizeLocation($("posFrom").value),
+        to: normalizeLocation($("posTo").value),
+        qty: $("qty").value
+      };
     }
     function clearDesktopInputs(){
       $("codigo").value=""; $("posFrom").value=""; $("posTo").value=""; $("qty").value="";
@@ -856,7 +872,12 @@
     }
 
     function readMobileInputs(){
-      return { codigo: $("mCodigo").value, from: $("mFrom").value, to: $("mTo").value, qty: $("mQty").value };
+      return {
+        codigo: $("mCodigo").value,
+        from: normalizeLocation($("mFrom").value),
+        to: normalizeLocation($("mTo").value),
+        qty: $("mQty").value
+      };
     }
     function clearMobileInputs(){
       $("mCodigo").value=""; $("mFrom").value=""; $("mTo").value=""; $("mQty").value="";
@@ -873,15 +894,15 @@
 
       if(which === "mobile"){
         $("mCodigo").value = parts[0];
-        $("mFrom").value   = parts[1];
-        $("mTo").value     = parts[2];
+        $("mFrom").value   = normalizeLocation(parts[1]);
+        $("mTo").value     = normalizeLocation(parts[2]);
         $("mQty").value    = qtyVal;
         await addMovement(readMobileInputs());
         clearMobileInputs();
       }else{
         $("codigo").value  = parts[0];
-        $("posFrom").value = parts[1];
-        $("posTo").value   = parts[2];
+        $("posFrom").value = normalizeLocation(parts[1]);
+        $("posTo").value   = normalizeLocation(parts[2]);
         $("qty").value     = qtyVal;
         await addMovement(readDesktopInputs());
         clearDesktopInputs();
