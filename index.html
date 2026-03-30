@@ -163,11 +163,11 @@
             </div>
             <div>
               <label for="posFrom">Posición (From)</label>
-              <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              <input id="posFrom" list="locList" placeholder="Ej: 01-30-088-02" autocomplete="off" type="text" />
             </div>
             <div>
               <label for="posTo">Posición (To)</label>
-              <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+              <input id="posTo" list="locList" placeholder="Ej: 01-30-088-03" autocomplete="off" type="text" />
             </div>
             <div>
               <label for="qty">Qty</label>
@@ -200,7 +200,7 @@
               <label for="mFrom">Posición (From)</label>
               <div class="keyRow">
                 <div class="keyWrap">
-                  <input id="mFrom" list="locList" placeholder="Buscar ubicación…" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                  <input id="mFrom" list="locList" placeholder="Buscar ubicación…" autocomplete="off" type="text" />
                 </div>
                 <button class="keyBtn" type="button" data-target="mFrom">ABC</button>
               </div>
@@ -210,7 +210,7 @@
               <label for="mTo">Posición (To)</label>
               <div class="keyRow">
                 <div class="keyWrap">
-                  <input id="mTo" list="locList" placeholder="Buscar ubicación…" autocomplete="off" type="text" inputmode="numeric" pattern="[0-9]*" />
+                  <input id="mTo" list="locList" placeholder="Buscar ubicación…" autocomplete="off" type="text" />
                 </div>
                 <button class="keyBtn" type="button" data-target="mTo">ABC</button>
               </div>
@@ -375,6 +375,21 @@
       }
     }
 
+    function normalizeLocation(value){
+      const raw = String(value ?? "").trim();
+      if(!raw) return "";
+      if(!raw.includes("-")) return raw;
+
+      const parts = raw.split("-").map(p => String(p).trim());
+      if(parts.length >= 4){
+        parts[0] = parts[0].padStart(2, "0");
+        parts[1] = parts[1].padStart(2, "0");
+        parts[2] = parts[2].padStart(3, "0");
+        parts[3] = parts[3].padStart(2, "0");
+      }
+      return parts.join("-");
+    }
+
     function buildCatalog(){
       const dl = $("locList");
       dl.innerHTML = "";
@@ -527,7 +542,7 @@
         else input.placeholder = "Ej: " + field.label;
 
         if(field.key === "posicion") input.setAttribute("list", "locList");
-        if(field.key === "codigo" || field.key === "qty" || field.key === "posicion"){
+        if(field.key === "codigo" || field.key === "qty"){
           input.setAttribute("inputmode", "numeric");
         }
 
@@ -570,7 +585,9 @@
       const obj = {};
       getVisibleEntryFields().forEach(field => {
         const el = $("dyn_" + field.key);
-        obj[field.key] = el ? el.value.trim() : "";
+        let value = el ? el.value.trim() : "";
+        if(field.key === "posicion") value = normalizeLocation(value);
+        obj[field.key] = value;
       });
 
       const palletField = palletFieldConfig.find(f => f.key === "pallet");
@@ -795,8 +812,8 @@
 
     async function addMovement({codigo, from, to, qty}){
       const c = String(codigo ?? "").trim();
-      const f = String(from ?? "").trim();
-      const t = String(to ?? "").trim();
+      const f = normalizeLocation(from);
+      const t = normalizeLocation(to);
       if(!c) return alert("Falta el Código.");
       if(!f) return alert("Falta From.");
       if(!t) return alert("Falta To.");
@@ -838,7 +855,9 @@
 
       const docData = {};
       activeFields.forEach(field => {
-        docData[field.key] = String(data[field.key] ?? "").trim();
+        let value = String(data[field.key] ?? "").trim();
+        if(field.key === "posicion") value = normalizeLocation(value);
+        docData[field.key] = value;
       });
       if("qty" in data) docData.qty = data.qty;
 
@@ -848,7 +867,12 @@
     }
 
     function readDesktopInputs(){
-      return { codigo: $("codigo").value, from: $("posFrom").value, to: $("posTo").value, qty: $("qty").value };
+      return {
+        codigo: $("codigo").value,
+        from: normalizeLocation($("posFrom").value),
+        to: normalizeLocation($("posTo").value),
+        qty: $("qty").value
+      };
     }
     function clearDesktopInputs(){
       $("codigo").value=""; $("posFrom").value=""; $("posTo").value=""; $("qty").value="";
@@ -856,7 +880,12 @@
     }
 
     function readMobileInputs(){
-      return { codigo: $("mCodigo").value, from: $("mFrom").value, to: $("mTo").value, qty: $("mQty").value };
+      return {
+        codigo: $("mCodigo").value,
+        from: normalizeLocation($("mFrom").value),
+        to: normalizeLocation($("mTo").value),
+        qty: $("mQty").value
+      };
     }
     function clearMobileInputs(){
       $("mCodigo").value=""; $("mFrom").value=""; $("mTo").value=""; $("mQty").value="";
@@ -1096,10 +1125,17 @@ async function clearAll(){
 
           const isABC = btn.classList.contains("active");
 
+          const isLocationField = id === "mFrom" || id === "mTo";
+
           if(isABC){
             btn.classList.remove("active");
-            el.setAttribute("inputmode","numeric");
-            el.setAttribute("pattern","[0-9]*");
+            if(isLocationField){
+              el.setAttribute("inputmode","text");
+              el.removeAttribute("pattern");
+            }else{
+              el.setAttribute("inputmode","numeric");
+              el.setAttribute("pattern","[0-9]*");
+            }
           }else{
             btn.classList.add("active");
             el.setAttribute("inputmode","text");
