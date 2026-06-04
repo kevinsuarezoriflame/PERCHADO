@@ -83,6 +83,45 @@
     .right{text-align:right}
     .btn-del{padding:9px 12px;border-radius:12px;font-weight:900;border:1px solid rgba(227,91,91,.35);background:#FFECEC;color:#8A1E1E;cursor:pointer;white-space:nowrap}
 
+
+
+    .responsableGate{
+      margin:12px 16px 0;
+      padding:12px 14px;
+      border:1px solid rgba(47,196,155,.35);
+      background:#F2FBF8;
+      border-radius:14px;
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:10px;
+      align-items:end;
+    }
+    .responsableGate .title{font-size:13px;font-weight:900;color:var(--accent2);margin-bottom:6px}
+    .responsableGate .hint{font-size:12px;color:var(--muted);font-weight:700;margin-top:6px}
+    .responsableBadge{
+      display:none;
+      align-items:center;
+      gap:8px;
+      background:#E7FBF5;
+      border:1px solid rgba(47,196,155,.35);
+      color:var(--accent2);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .tab-panel.locked .content,
+    .tab-panel.locked .palletBar,
+    .tab-panel.locked section{
+      opacity:.45;
+      pointer-events:none;
+      filter:grayscale(.2);
+    }
+    @media (max-width:700px){
+      .responsableGate{grid-template-columns:1fr}
+      .responsableBadge{justify-content:center}
+    }
+
     .operator{display:none}
     .operator .grid{display:grid;grid-template-columns:1fr;gap:10px}
     .operator .big input{font-size:16px;padding:14px 14px;border-radius:14px}
@@ -144,6 +183,17 @@
       <div class="tabs">
         <button class="tab-btn active" data-tab="tab-movimientos">Movimientos</button>
         <button class="tab-btn" data-tab="tab-pallets">Registro por pallet</button>
+      </div>
+
+      <div class="responsableGate" id="responsableGate">
+        <div>
+          <div class="title">Responsable obligatorio</div>
+          <input id="responsableInput" placeholder="Ingresa tu nombre antes de registrar" autocomplete="off" type="text" />
+          <div class="hint">Este nombre se guardará en cada registro y saldrá en el Excel.</div>
+        </div>
+        <button class="btn-primary" id="btnSetResponsable" type="button">Iniciar</button>
+        <div class="responsableBadge" id="responsableBadge">Responsable: <span id="responsableNameView"></span></div>
+        <button class="btn-secondary" id="btnChangeResponsable" type="button" style="display:none">Cambiar</button>
       </div>
 
       <div class="tab-panel active" id="tab-movimientos">
@@ -245,6 +295,7 @@
                 <col style="width:38%">
                 <col style="width:38%">
                 <col style="width:90px">
+                <col style="width:160px">
                 <col style="width:170px">
                 <col style="width:120px">
               </colgroup>
@@ -254,6 +305,7 @@
                   <th>From</th>
                   <th>To</th>
                   <th class="right">Qty</th>
+                  <th>Responsable</th>
                   <th>Fecha</th>
                   <th>Acción</th>
                 </tr>
@@ -418,6 +470,43 @@
     let ROWS = [];
     let PALLET_ROWS = [];
 
+    let RESPONSABLE = localStorage.getItem("perchar_responsable") || "";
+
+    function currentResponsable(){
+      return String(RESPONSABLE || "").trim();
+    }
+
+    function requireResponsable(){
+      const r = currentResponsable();
+      if(!r){
+        alert("Primero ingresa el nombre del responsable.");
+        $("responsableInput")?.focus();
+        return "";
+      }
+      return r;
+    }
+
+    function applyResponsableUI(){
+      const r = currentResponsable();
+      const locked = !r;
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("locked", locked));
+
+      if($("responsableInput")) $("responsableInput").value = r;
+      if($("responsableNameView")) $("responsableNameView").textContent = r;
+      if($("responsableBadge")) $("responsableBadge").style.display = r ? "inline-flex" : "none";
+      if($("btnChangeResponsable")) $("btnChangeResponsable").style.display = r ? "inline-flex" : "none";
+      if($("btnSetResponsable")) $("btnSetResponsable").textContent = r ? "Actualizar" : "Iniciar";
+    }
+
+    function setResponsableFromInput(){
+      const name = ($("responsableInput")?.value || "").trim().replace(/\s+/g, " ");
+      if(!name) return alert("Ingresa el nombre del responsable.");
+      RESPONSABLE = name;
+      localStorage.setItem("perchar_responsable", RESPONSABLE);
+      applyResponsableUI();
+    }
+
+
     let palletFieldConfig = [
       { key:"pallet", label:"Pallet", active:true, fixed:false, builtIn:true },
       { key:"codigo", label:"Código", active:true, fixed:true, builtIn:true },
@@ -572,6 +661,10 @@
         row.appendChild(th);
       });
 
+      const thResp = document.createElement("th");
+      thResp.textContent = "Responsable";
+      row.appendChild(thResp);
+
       const thFecha = document.createElement("th");
       thFecha.textContent = "Fecha";
       row.appendChild(thFecha);
@@ -679,6 +772,7 @@
           <td title="${esc(r.from)}">${esc(r.from)}</td>
           <td title="${esc(r.to)}">${esc(r.to)}</td>
           <td class="right" title="${esc(r.qty)}">${esc(r.qty)}</td>
+          <td title="${esc(r.responsable || '')}">${esc(r.responsable || '')}</td>
           <td title="${esc(fecha)}">${esc(fecha)}</td>
           <td><button class="btn-del" data-id="${r.id}">Eliminar</button></td>
         `;
@@ -708,6 +802,7 @@
           <div class="mMeta">
             <div><b style="color:var(--ink)">From</b><br>${esc(r.from)}</div>
             <div><b style="color:var(--ink)">To</b><br>${esc(r.to)}</div>
+            <div><b style="color:var(--ink)">Responsable</b><br>${esc(r.responsable || '')}</div>
           </div>
           <div class="mActions">
             <button class="btn-del" data-id="${r.id}">Eliminar</button>
@@ -743,6 +838,7 @@
           const cls = field.key === "qty" ? ' class="right"' : "";
           return `<td${cls} title="${esc(val)}">${esc(val)}</td>`;
         }).join("") + `
+          <td title="${esc(r.responsable || '')}">${esc(r.responsable || '')}</td>
           <td title="${esc(fecha)}">${esc(fecha)}</td>
           <td><button class="btn-del" data-pallet-id="${r.id}">Eliminar</button></td>
         `;
@@ -776,7 +872,7 @@
             <div>${esc(r.pallet || "")} <span style="color:var(--muted);font-weight:800">• ${esc(r.codigo || "")}</span></div>
             <div style="color:var(--muted);font-size:12px;font-weight:800">${esc(fecha)}</div>
           </div>
-          <div class="mMeta">${meta}</div>
+          <div class="mMeta">${meta}<div><b style="color:var(--ink)">Responsable</b><br>${esc(r.responsable || "")}</div></div>
           <div class="mActions">
             <button class="btn-del" data-pallet-id="${r.id}">Eliminar</button>
           </div>
@@ -811,6 +907,8 @@
     }
 
     async function addMovement({codigo, from, to, qty}){
+      const responsable = requireResponsable();
+      if(!responsable) return;
       const c = String(codigo ?? "").trim();
       const f = normalizeLocation(from);
       const t = normalizeLocation(to);
@@ -826,11 +924,14 @@
         from: f,
         to: t,
         qty: vq.value,
+        responsable,
         createdAt: serverTimestamp()
       });
     }
 
     async function addPalletRecord(data){
+      const responsable = requireResponsable();
+      if(!responsable) return;
       const palletField = palletFieldConfig.find(f => f.key === "pallet");
       const activeFields = getActivePalletFields();
 
@@ -861,6 +962,7 @@
       });
       if("qty" in data) docData.qty = data.qty;
 
+      docData.responsable = responsable;
       docData.createdAt = serverTimestamp();
 
       await addDoc(collection(db, COL_PALLETS), docData);
@@ -988,6 +1090,7 @@
         "posicion(from)": r.from,
         "posicion(to)": r.to,
         qty: r.qty,
+        responsable: r.responsable || "",
         fecha: fmtDate(r.createdAt || r.fecha || "")
       }));
       const ws = XLSX.utils.json_to_sheet(data);
@@ -1003,6 +1106,7 @@
       const data = PALLET_ROWS.slice().reverse().map(r => {
         const obj = {};
         activeFields.forEach(f => obj[f.label] = r[f.key] ?? "");
+        obj["Responsable"] = r.responsable || "";
         obj["Fecha"] = fmtDate(r.createdAt || r.fecha || "");
         return obj;
       });
@@ -1052,6 +1156,19 @@ async function clearAll(){
       await batch.commit();
       setPalletStatus(true,"Todo limpio");
     }
+
+
+
+    $("btnSetResponsable").addEventListener("click", setResponsableFromInput);
+    $("btnChangeResponsable").addEventListener("click", ()=>{
+      localStorage.removeItem("perchar_responsable");
+      RESPONSABLE = "";
+      applyResponsableUI();
+      $("responsableInput").focus();
+    });
+    $("responsableInput").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") setResponsableFromInput();
+    });
 
     $("btnAdd").addEventListener("click", async ()=>{
       await addMovement(readDesktopInputs());
@@ -1164,6 +1281,7 @@ async function clearAll(){
     }
 
     buildCatalog();
+    applyResponsableUI();
   loadPalletFieldConfig();
     enableKeyboardToggles();
     enableTabs();
